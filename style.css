@@ -13,12 +13,22 @@ body {
 
 .header-container {
   display: flex;
+  justify-content: space-between;
+}
+
+.header-left-item {
+  display: flex;
+  column-gap: 20px;
+}
+
+.header-right-item {
+  display: flex;
   column-gap: 20px;
 }
 
 .list-container {
   display: flex;
-  column-gap: 20px;
+  column-gap: 10px;
 }
 
 .list {
