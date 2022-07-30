@@ -15,4 +15,14 @@ body {
 .list {
   width: 300px;
   background-color: #cecece;
+  padding: 10px;
+}
+
+.list-title {
+  display: flex;
+}
+
+.card {
+  padding: 10px;
+  background-color: #ffffff;
 }
