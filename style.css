@@ -24,6 +24,12 @@ body {
   line-height: 32px;
 }
 
+.header-trello {
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
+}
+
 .header-left-item {
   display: flex;
   column-gap: 20px;
