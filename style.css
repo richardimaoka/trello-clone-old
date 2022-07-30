@@ -14,6 +14,14 @@ body {
 .header-container {
   display: flex;
   justify-content: space-between;
+  color: white;
+}
+
+.header-ellipsis {
+  width: 32px;
+  height: 32px;
+  text-align: center;
+  line-height: 32px;
 }
 
 .header-left-item {
