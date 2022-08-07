@@ -1,0 +1,20 @@
+{
+  "hello": "Hello World",
+  "search": [
+    {
+      "name": "ゴードン島津",
+      "jobTitle": "データベース・エンジニア",
+      "department": "エンジニアリング部門"
+    },
+    {
+      "name": "キャサリン梅田",
+      "jobTitle": "アプリケーション・エンジニア",
+      "department": "エンジニアリング部門"
+    },
+    {
+      "name": "春子サンダーボルト",
+      "jobTitle": "インフラ・エンジニア",
+      "department": "エンジニアリング部門"
+    }
+  ]
+}

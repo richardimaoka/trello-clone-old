@@ -1,0 +1,10 @@
+type Query {
+  hello: String
+  search(department: String): [Employee]
+}
+
+type Employee {
+  name: String
+  jobTitle: String
+  department: String
+}
