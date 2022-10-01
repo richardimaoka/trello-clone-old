@@ -1,20 +1,27 @@
 {
-  "hello": "Hello World",
-  "search": [
-    {
-      "name": "ゴードン島津",
-      "jobTitle": "データベース・エンジニア",
-      "department": "エンジニアリング部門"
-    },
-    {
-      "name": "キャサリン梅田",
-      "jobTitle": "アプリケーション・エンジニア",
-      "department": "エンジニアリング部門"
-    },
-    {
-      "name": "春子サンダーボルト",
-      "jobTitle": "インフラ・エンジニア",
-      "department": "エンジニアリング部門"
-    }
-  ]
+  "ready": {
+    "maxNumCards": 5,
+    "cards": [
+      {
+        "title": "8/4 劇場版スタァライト",
+        "description": "",
+        "labels": []
+      },
+      {
+        "title": "8/5 スピラ・スピカのチケット情報",
+        "description": "",
+        "labels": []
+      },
+      {
+        "title": "8/20 電音部 2nd LIVE 上映&DJイベントのチケット情報",
+        "description": "",
+        "labels": []
+      },
+      {
+        "title": "Quickly Filter Data in Amazon Redshift Using Interleaved Sorting",
+        "description": "",
+        "labels": []
+      }
+    ]
+  }
 }
