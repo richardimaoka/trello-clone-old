@@ -8,3 +8,12 @@ type Employee {
   jobTitle: String
   department: String
 }
+
+type Mutation {
+  moveCardToList(
+    fromListId: String
+    toListId: String
+    cardId: String
+    listPositionIndex: String
+  ): String
+}
