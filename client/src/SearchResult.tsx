@@ -25,11 +25,10 @@ export const SearchResult = () => {
   if (loading) {
     return <div>loading...</div>;
   } else if (error) {
-    return <div>error happened</div>;
+    return <div>error happened {error.message}</div>;
   } else if (!data || !data.search) {
     return <div>error happened</div>;
   } else {
-    const employees = excludeNullFromArray<Employee>(data.search);
-    return <SearchResultNonEmpty employees={employees} />;
+    return <div></div>;
   }
 };

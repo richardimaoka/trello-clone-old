@@ -19,21 +19,23 @@ export type Scalars = {
   Float: number;
 };
 
-export type Employee = {
-  __typename?: "Employee";
-  department: Maybe<Scalars["String"]>;
-  jobTitle: Maybe<Scalars["String"]>;
-  name: Maybe<Scalars["String"]>;
+export type Card = {
+  __typename?: "Card";
+  description: Maybe<Scalars["String"]>;
+  labels: Maybe<Array<Maybe<Scalars["String"]>>>;
+  title: Maybe<Scalars["String"]>;
+};
+
+export type List = {
+  __typename?: "List";
+  cards: Maybe<Array<Maybe<Card>>>;
+  maxNumCards: Maybe<Scalars["Int"]>;
+  title: Maybe<Scalars["String"]>;
 };
 
 export type Query = {
   __typename?: "Query";
-  hello: Maybe<Scalars["String"]>;
-  search: Maybe<Array<Maybe<Employee>>>;
-};
-
-export type QuerySearchArgs = {
-  department: InputMaybe<Scalars["String"]>;
+  lists: Maybe<Array<Maybe<List>>>;
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -144,7 +146,9 @@ export type DirectiveResolverFn<
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
-  Employee: ResolverTypeWrapper<Employee>;
+  Card: ResolverTypeWrapper<Card>;
+  Int: ResolverTypeWrapper<Scalars["Int"]>;
+  List: ResolverTypeWrapper<List>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
 };
@@ -152,22 +156,42 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars["Boolean"];
-  Employee: Employee;
+  Card: Card;
+  Int: Scalars["Int"];
+  List: List;
   Query: {};
   String: Scalars["String"];
 };
 
-export type EmployeeResolvers<
+export type CardResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes["Employee"] = ResolversParentTypes["Employee"]
+  ParentType extends ResolversParentTypes["Card"] = ResolversParentTypes["Card"]
 > = {
-  department: Resolver<
+  description: Resolver<
     Maybe<ResolversTypes["String"]>,
     ParentType,
     ContextType
   >;
-  jobTitle: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  name: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  labels: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["String"]>>>,
+    ParentType,
+    ContextType
+  >;
+  title: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ListResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["List"] = ResolversParentTypes["List"]
+> = {
+  cards: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["Card"]>>>,
+    ParentType,
+    ContextType
+  >;
+  maxNumCards: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
+  title: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -175,16 +199,15 @@ export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
 > = {
-  hello: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
-  search: Resolver<
-    Maybe<Array<Maybe<ResolversTypes["Employee"]>>>,
+  lists: Resolver<
+    Maybe<Array<Maybe<ResolversTypes["List"]>>>,
     ParentType,
-    ContextType,
-    Partial<QuerySearchArgs>
+    ContextType
   >;
 };
 
 export type Resolvers<ContextType = any> = {
-  Employee: EmployeeResolvers<ContextType>;
+  Card: CardResolvers<ContextType>;
+  List: ListResolvers<ContextType>;
   Query: QueryResolvers<ContextType>;
 };

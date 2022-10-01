@@ -1,19 +1,15 @@
 type Query {
-  hello: String
-  search(department: String): [Employee]
+  lists: [List]
 }
 
-type Employee {
-  name: String
-  jobTitle: String
-  department: String
+type List {
+  title: String
+  maxNumCards: Int
+  cards: [Card]
 }
 
-type Mutation {
-  moveCardToList(
-    fromListId: String
-    toListId: String
-    cardId: String
-    listPositionIndex: String
-  ): String
+type Card {
+  title: String
+  description: String
+  labels: [String]
 }
