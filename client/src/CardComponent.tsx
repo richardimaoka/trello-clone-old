@@ -1,4 +1,6 @@
+/** @jsxImportSource @emotion/react */
 import { gql } from "@apollo/client";
+import { css } from "@emotion/react";
 import { CardComponentFragment } from "./generated/graphql";
 
 export interface CardComponentProps {
@@ -7,7 +9,7 @@ export interface CardComponentProps {
 
 export const CardComponent = ({ fragment }: CardComponentProps) => {
   return (
-    <div style={{ display: "flex", columnGap: "20px", marginBottom: "10px" }}>
+    <div draggable={true} css={css``}>
       <div>{fragment.title}</div>
     </div>
   );
