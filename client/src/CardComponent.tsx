@@ -8,6 +8,10 @@ export interface CardComponentProps {
 }
 
 export const CardComponent = ({ fragment }: CardComponentProps) => {
+  const something = () => {
+    console.log("somethings is called");
+  };
+
   return (
     <div
       draggable={true}
@@ -15,6 +19,7 @@ export const CardComponent = ({ fragment }: CardComponentProps) => {
         padding: 10px;
         background-color: #ffffff;
       `}
+      onDragStart={something}
     >
       <div>{fragment.title}</div>
     </div>

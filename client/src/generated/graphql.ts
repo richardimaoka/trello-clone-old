@@ -37,6 +37,7 @@ export type List = {
 
 export type Query = {
   __typename?: "Query";
+  draggedCard: Maybe<Scalars["Int"]>;
   lists: Maybe<Array<Maybe<List>>>;
 };
 
@@ -63,6 +64,7 @@ export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSearchResultQuery = {
   __typename?: "Query";
+  draggedCard: number | null;
   lists: Array<{
     __typename?: "List";
     title: string | null;
@@ -95,6 +97,7 @@ export const ListComponentFragmentDoc = gql`
 `;
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
+    draggedCard @client
     lists {
       ...ListComponent
     }

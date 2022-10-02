@@ -8,6 +8,7 @@ import { ListComponent } from "./ListComponent";
 //This is read by GraphQL codegen to generate types
 gql`
   query GetSearchResult {
+    draggedCard @client # This is a local-only field
     lists {
       ...ListComponent
     }
