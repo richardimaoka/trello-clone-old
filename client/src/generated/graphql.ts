@@ -21,56 +21,62 @@ export type Scalars = {
   Float: number;
 };
 
-export type Employee = {
-  __typename?: "Employee";
-  department: Maybe<Scalars["String"]>;
-  jobTitle: Maybe<Scalars["String"]>;
-  name: Maybe<Scalars["String"]>;
+export type Card = {
+  __typename?: "Card";
+  description: Maybe<Scalars["String"]>;
+  labels: Maybe<Array<Maybe<Scalars["String"]>>>;
+  title: Maybe<Scalars["String"]>;
+};
+
+export type List = {
+  __typename?: "List";
+  cards: Maybe<Array<Maybe<Card>>>;
+  maxNumCards: Maybe<Scalars["Int"]>;
+  title: Maybe<Scalars["String"]>;
 };
 
 export type Query = {
   __typename?: "Query";
-  hello: Maybe<Scalars["String"]>;
-  search: Maybe<Array<Maybe<Employee>>>;
+  lists: Maybe<Array<Maybe<List>>>;
 };
 
-export type QuerySearchArgs = {
-  department: InputMaybe<Scalars["String"]>;
-};
-
-export type EmployeeComponentFragment = {
-  __typename?: "Employee";
-  name: string | null;
-  jobTitle: string | null;
-  department: string | null;
+export type CardComponentFragment = {
+  __typename?: "Card";
+  title: string | null;
+  description: string | null;
+  labels: Array<string | null> | null;
 };
 
 export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSearchResultQuery = {
   __typename?: "Query";
-  search: Array<{
-    __typename?: "Employee";
-    name: string | null;
-    jobTitle: string | null;
-    department: string | null;
+  lists: Array<{
+    __typename?: "List";
+    cards: Array<{
+      __typename?: "Card";
+      description: string | null;
+      title: string | null;
+    } | null> | null;
   } | null> | null;
 };
 
-export const EmployeeComponentFragmentDoc = gql`
-  fragment EmployeeComponent on Employee {
-    name
-    jobTitle
-    department
+export const CardComponentFragmentDoc = gql`
+  fragment CardComponent on Card {
+    title
+    description
+    labels
   }
 `;
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
-    search {
-      ...EmployeeComponent
+    lists {
+      cards {
+        description
+        title
+      }
     }
   }
-  ${EmployeeComponentFragmentDoc}
 `;
 
 /**
