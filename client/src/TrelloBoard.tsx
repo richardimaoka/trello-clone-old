@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from "@emotion/react";
 import { gql } from "@apollo/client";
 import { excludeNullFromArray } from "./excludeNullFromArray";
 import { List, useGetSearchResultQuery } from "./generated/graphql";
@@ -23,7 +25,12 @@ export const TrelloBoard = () => {
   } else {
     const lists = data.lists ? excludeNullFromArray<List>(data.lists) : [];
     return (
-      <div>
+      <div
+        css={css`
+          display: flex;
+          column-gap: 10px;
+        `}
+      >
         {lists.map((l, index) => (
           <ListComponent key={index} fragment={l} />
         ))}

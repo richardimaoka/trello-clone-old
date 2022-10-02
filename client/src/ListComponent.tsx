@@ -1,4 +1,6 @@
+/** @jsxImportSource @emotion/react */
 import { gql } from "@apollo/client";
+import { css } from "@emotion/react";
 import { Card, ListComponentFragment } from "./generated/graphql";
 import { CardComponent } from "./CardComponent";
 import { excludeNullFromArray } from "./excludeNullFromArray";
@@ -13,7 +15,13 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
     : [];
 
   return (
-    <div>
+    <div
+      css={css`
+        width: 300px;
+        background-color: #cecece;
+        padding: 10px;
+      `}
+    >
       <div>{fragment.title}</div>
       {cards.map((c, index) => (
         <CardComponent key={index} fragment={c} />
