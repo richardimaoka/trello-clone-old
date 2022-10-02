@@ -9,7 +9,13 @@ export interface CardComponentProps {
 
 export const CardComponent = ({ fragment }: CardComponentProps) => {
   return (
-    <div draggable={true} css={css``}>
+    <div
+      draggable={true}
+      css={css`
+        padding: 10px;
+        background-color: #ffffff;
+      `}
+    >
       <div>{fragment.title}</div>
     </div>
   );

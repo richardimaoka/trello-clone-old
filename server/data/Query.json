@@ -1,7 +1,39 @@
 {
   "lists": [
     {
-      "title": "ready",
+      "title": "習慣・優先度高",
+      "maxNumCards": 2,
+      "cards": [
+        {
+          "title": "tutorial",
+          "description": "",
+          "labels": []
+        },
+        {
+          "title": "AWS certification",
+          "description": "",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "title": "習慣・優先度低",
+      "maxNumCards": 3,
+      "cards": [
+        {
+          "title": "tutorial",
+          "description": "",
+          "labels": []
+        },
+        {
+          "title": "AWS certification",
+          "description": "",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "title": "Ready",
       "maxNumCards": 5,
       "cards": [
         {
@@ -25,6 +57,20 @@
           "labels": []
         }
       ]
+    },
+    {
+      "title": "On it < 60 min",
+      "maxNumCards": 1,
+      "cards": []
+    },
+    {
+      "title": "Waiting",
+      "maxNumCards": 1,
+      "cards": []
+    },
+    {
+      "title": "DONE",
+      "cards": []
     }
   ]
 }
