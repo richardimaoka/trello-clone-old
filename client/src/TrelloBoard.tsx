@@ -1,27 +1,16 @@
 import { gql } from "@apollo/client";
-// import { EmployeeComponent } from "./EmployeeComponent";
-// import { excludeNullFromArray } from "./excludeNullFromArray";
-import { useGetSearchResultQuery } from "./generated/graphql";
+import { excludeNullFromArray } from "./excludeNullFromArray";
+import { List, useGetSearchResultQuery } from "./generated/graphql";
+import { ListComponent } from "./ListComponent";
 
 //This is read by GraphQL codegen to generate types
 gql`
   query GetSearchResult {
     lists {
-      cards {
-        description
-        title
-      }
+      ...ListComponent
     }
   }
 `;
-
-// const SearchResultNonEmpty = ({ employees }: { employees: Employee[] }) => (
-//   <div>
-//     {employees.map((employee) => (
-//       <EmployeeComponent fragment={employee} />
-//     ))}
-//   </div>
-// );
 
 export const TrelloBoard = () => {
   const { loading, error, data } = useGetSearchResultQuery();
@@ -32,6 +21,13 @@ export const TrelloBoard = () => {
   } else if (!data) {
     return <div>error happened</div>;
   } else {
-    return <div>non error</div>;
+    const lists = data.lists ? excludeNullFromArray<List>(data.lists) : [];
+    return (
+      <div>
+        {lists.map((l, index) => (
+          <ListComponent key={index} fragment={l} />
+        ))}
+      </div>
+    );
   }
 };

@@ -47,16 +47,31 @@ export type CardComponentFragment = {
   labels: Array<string | null> | null;
 };
 
+export type ListComponentFragment = {
+  __typename?: "List";
+  title: string | null;
+  maxNumCards: number | null;
+  cards: Array<{
+    __typename?: "Card";
+    title: string | null;
+    description: string | null;
+    labels: Array<string | null> | null;
+  } | null> | null;
+};
+
 export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSearchResultQuery = {
   __typename?: "Query";
   lists: Array<{
     __typename?: "List";
+    title: string | null;
+    maxNumCards: number | null;
     cards: Array<{
       __typename?: "Card";
-      description: string | null;
       title: string | null;
+      description: string | null;
+      labels: Array<string | null> | null;
     } | null> | null;
   } | null> | null;
 };
@@ -68,15 +83,23 @@ export const CardComponentFragmentDoc = gql`
     labels
   }
 `;
+export const ListComponentFragmentDoc = gql`
+  fragment ListComponent on List {
+    title
+    maxNumCards
+    cards {
+      ...CardComponent
+    }
+  }
+  ${CardComponentFragmentDoc}
+`;
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
     lists {
-      cards {
-        description
-        title
-      }
+      ...ListComponent
     }
   }
+  ${ListComponentFragmentDoc}
 `;
 
 /**
