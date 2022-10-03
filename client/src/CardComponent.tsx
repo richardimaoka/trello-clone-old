@@ -2,16 +2,13 @@
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { CardComponentFragment } from "./generated/graphql";
-
+import { draggedCard } from "./Cache";
 export interface CardComponentProps {
   fragment: CardComponentFragment;
 }
 
+let i = 0;
 export const CardComponent = ({ fragment }: CardComponentProps) => {
-  const something = () => {
-    console.log("somethings is called");
-  };
-
   return (
     <div
       draggable={true}
@@ -19,7 +16,9 @@ export const CardComponent = ({ fragment }: CardComponentProps) => {
         padding: 10px;
         background-color: #ffffff;
       `}
-      onDragStart={something}
+      onClick={() => {
+        draggedCard(i++);
+      }}
     >
       <div>{fragment.title}</div>
     </div>

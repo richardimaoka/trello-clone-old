@@ -1,3 +1,9 @@
 type Query {
   draggedCard: Int
+  fullName: FullName
+}
+
+type FullName {
+  firstName: String
+  lastName: String
 }

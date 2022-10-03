@@ -28,6 +28,12 @@ export type Card = {
   title: Maybe<Scalars["String"]>;
 };
 
+export type FullName = {
+  __typename?: "FullName";
+  firstName: Maybe<Scalars["String"]>;
+  lastName: Maybe<Scalars["String"]>;
+};
+
 export type List = {
   __typename?: "List";
   cards: Maybe<Array<Maybe<Card>>>;
@@ -38,6 +44,7 @@ export type List = {
 export type Query = {
   __typename?: "Query";
   draggedCard: Maybe<Scalars["Int"]>;
+  fullName: Maybe<FullName>;
   lists: Maybe<Array<Maybe<List>>>;
 };
 
@@ -65,6 +72,11 @@ export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 export type GetSearchResultQuery = {
   __typename?: "Query";
   draggedCard: number | null;
+  fullName: {
+    __typename?: "FullName";
+    firstName: string | null;
+    lastName: string | null;
+  } | null;
   lists: Array<{
     __typename?: "List";
     title: string | null;
@@ -98,11 +110,20 @@ export const ListComponentFragmentDoc = gql`
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
     draggedCard @client
+    fullName @client {
+      firstName
+      lastName
+    }
     lists {
-      ...ListComponent
+      title
+      maxNumCards
+      cards {
+        title
+        description
+        labels
+      }
     }
   }
-  ${ListComponentFragmentDoc}
 `;
 
 /**
