@@ -49,13 +49,6 @@ export type CardComponentFragment = {
   labels: Array<string | null> | null;
 };
 
-export type GetCartItemsQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetCartItemsQuery = {
-  __typename?: "Query";
-  cartItems: Array<number | null> | null;
-};
-
 export type ListComponentFragment = {
   __typename?: "List";
   title: string | null;
@@ -103,61 +96,6 @@ export const ListComponentFragmentDoc = gql`
   }
   ${CardComponentFragmentDoc}
 `;
-export const GetCartItemsDocument = gql`
-  query GetCartItems {
-    cartItems @client
-  }
-`;
-
-/**
- * __useGetCartItemsQuery__
- *
- * To run a query within a React component, call `useGetCartItemsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCartItemsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetCartItemsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetCartItemsQuery(
-  baseOptions?: Apollo.QueryHookOptions<
-    GetCartItemsQuery,
-    GetCartItemsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetCartItemsQuery, GetCartItemsQueryVariables>(
-    GetCartItemsDocument,
-    options
-  );
-}
-export function useGetCartItemsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetCartItemsQuery,
-    GetCartItemsQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetCartItemsQuery, GetCartItemsQueryVariables>(
-    GetCartItemsDocument,
-    options
-  );
-}
-export type GetCartItemsQueryHookResult = ReturnType<
-  typeof useGetCartItemsQuery
->;
-export type GetCartItemsLazyQueryHookResult = ReturnType<
-  typeof useGetCartItemsLazyQuery
->;
-export type GetCartItemsQueryResult = Apollo.QueryResult<
-  GetCartItemsQuery,
-  GetCartItemsQueryVariables
->;
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
     draggedCard @client
