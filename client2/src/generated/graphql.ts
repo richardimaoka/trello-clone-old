@@ -38,6 +38,7 @@ export type List = {
 export type Query = {
   __typename?: "Query";
   cartItems: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  draggedCard: Maybe<Scalars["Int"]>;
   lists: Maybe<Array<Maybe<List>>>;
 };
 
@@ -64,6 +65,25 @@ export type ListComponentFragment = {
     title: string | null;
     description: string | null;
     labels: Array<string | null> | null;
+  } | null> | null;
+};
+
+export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
+
+export type GetSearchResultQuery = {
+  __typename?: "Query";
+  cartItems: Array<number | null> | null;
+  draggedCard: number | null;
+  lists: Array<{
+    __typename?: "List";
+    title: string | null;
+    maxNumCards: number | null;
+    cards: Array<{
+      __typename?: "Card";
+      title: string | null;
+      description: string | null;
+      labels: Array<string | null> | null;
+    } | null> | null;
   } | null> | null;
 };
 
@@ -138,4 +158,69 @@ export type GetCartItemsLazyQueryHookResult = ReturnType<
 export type GetCartItemsQueryResult = Apollo.QueryResult<
   GetCartItemsQuery,
   GetCartItemsQueryVariables
+>;
+export const GetSearchResultDocument = gql`
+  query GetSearchResult {
+    cartItems @client
+    draggedCard @client
+    lists {
+      title
+      maxNumCards
+      cards {
+        title
+        description
+        labels
+      }
+    }
+  }
+`;
+
+/**
+ * __useGetSearchResultQuery__
+ *
+ * To run a query within a React component, call `useGetSearchResultQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSearchResultQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSearchResultQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSearchResultQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetSearchResultQuery,
+    GetSearchResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetSearchResultQuery, GetSearchResultQueryVariables>(
+    GetSearchResultDocument,
+    options
+  );
+}
+export function useGetSearchResultLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetSearchResultQuery,
+    GetSearchResultQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetSearchResultQuery,
+    GetSearchResultQueryVariables
+  >(GetSearchResultDocument, options);
+}
+export type GetSearchResultQueryHookResult = ReturnType<
+  typeof useGetSearchResultQuery
+>;
+export type GetSearchResultLazyQueryHookResult = ReturnType<
+  typeof useGetSearchResultLazyQuery
+>;
+export type GetSearchResultQueryResult = Apollo.QueryResult<
+  GetSearchResultQuery,
+  GetSearchResultQueryVariables
 >;

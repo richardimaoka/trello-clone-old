@@ -3,6 +3,7 @@ import { AddToCartButton } from "./AddToCartButton";
 import "./App.css";
 import { cartItemsVar } from "./cache";
 import { Cart } from "./Cart";
+import { TrelloBoard } from "./TrelloBoard";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000",
@@ -45,10 +46,9 @@ const Internal = () => <div>internal</div>;
 const App = () => {
   return (
     <ApolloProvider client={client}>
-      <h2>My first Apollo app 🚀</h2>
-      <br />
       <AddToCartButton productId={20} />
       <Cart />
+      <TrelloBoard />
     </ApolloProvider>
   );
 };
