@@ -24,6 +24,7 @@ export type Scalars = {
 export type Card = {
   __typename?: "Card";
   description: Maybe<Scalars["String"]>;
+  id: Scalars["ID"];
   labels: Maybe<Array<Maybe<Scalars["String"]>>>;
   title: Maybe<Scalars["String"]>;
 };
@@ -38,12 +39,13 @@ export type List = {
 export type Query = {
   __typename?: "Query";
   cartItems: Maybe<Array<Maybe<Scalars["Int"]>>>;
-  draggedCard: Maybe<Scalars["Int"]>;
+  draggedCard: Maybe<Scalars["ID"]>;
   lists: Maybe<Array<Maybe<List>>>;
 };
 
 export type CardComponentFragment = {
   __typename?: "Card";
+  id: string;
   title: string | null;
   description: string | null;
   labels: Array<string | null> | null;
@@ -55,6 +57,7 @@ export type ListComponentFragment = {
   maxNumCards: number | null;
   cards: Array<{
     __typename?: "Card";
+    id: string;
     title: string | null;
     description: string | null;
     labels: Array<string | null> | null;
@@ -65,13 +68,14 @@ export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSearchResultQuery = {
   __typename?: "Query";
-  draggedCard: number | null;
+  draggedCard: string | null;
   lists: Array<{
     __typename?: "List";
     title: string | null;
     maxNumCards: number | null;
     cards: Array<{
       __typename?: "Card";
+      id: string;
       title: string | null;
       description: string | null;
       labels: Array<string | null> | null;
@@ -81,6 +85,7 @@ export type GetSearchResultQuery = {
 
 export const CardComponentFragmentDoc = gql`
   fragment CardComponent on Card {
+    id
     title
     description
     labels
@@ -103,6 +108,7 @@ export const GetSearchResultDocument = gql`
       title
       maxNumCards
       cards {
+        id
         title
         description
         labels

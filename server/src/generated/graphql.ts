@@ -22,6 +22,7 @@ export type Scalars = {
 export type Card = {
   __typename?: "Card";
   description: Maybe<Scalars["String"]>;
+  id: Scalars["ID"];
   labels: Maybe<Array<Maybe<Scalars["String"]>>>;
   title: Maybe<Scalars["String"]>;
 };
@@ -147,6 +148,7 @@ export type DirectiveResolverFn<
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Card: ResolverTypeWrapper<Card>;
+  ID: ResolverTypeWrapper<Scalars["ID"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   List: ResolverTypeWrapper<List>;
   Query: ResolverTypeWrapper<{}>;
@@ -157,6 +159,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars["Boolean"];
   Card: Card;
+  ID: Scalars["ID"];
   Int: Scalars["Int"];
   List: List;
   Query: {};
@@ -172,6 +175,7 @@ export type CardResolvers<
     ParentType,
     ContextType
   >;
+  id: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   labels: Resolver<
     Maybe<Array<Maybe<ResolversTypes["String"]>>>,
     ParentType,

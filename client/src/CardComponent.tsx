@@ -7,7 +7,6 @@ export interface CardComponentProps {
   fragment: CardComponentFragment;
 }
 
-let i = 0;
 export const CardComponent = ({ fragment }: CardComponentProps) => {
   return (
     <div
@@ -16,10 +15,8 @@ export const CardComponent = ({ fragment }: CardComponentProps) => {
         padding: 10px;
         background-color: #ffffff;
       `}
-      onClick={() => {
-        console.log("onClick");
-
-        draggedCard(i++);
+      onDragStart={() => {
+        draggedCard(fragment.id);
         console.log("set draggedCard = ", draggedCard());
       }}
     >
@@ -30,6 +27,7 @@ export const CardComponent = ({ fragment }: CardComponentProps) => {
 
 CardComponent.fragment = gql`
   fragment CardComponent on Card {
+    id
     title
     description
     labels

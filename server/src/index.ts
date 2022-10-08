@@ -28,6 +28,9 @@ const resolvers: Resolvers<LoadingDataContext> = {
     },
   },
   Card: {
+    id: async (parent, _args, _content, _info) => {
+      return parent.id;
+    },
     title: async (parent, _args, _content, _info) => {
       return parent.title;
     },

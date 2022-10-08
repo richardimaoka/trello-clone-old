@@ -1,4 +1,4 @@
 type Query {
-  draggedCard: Int
+  draggedCard: ID
   cartItems: [Int]
 }
