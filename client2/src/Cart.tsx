@@ -1,4 +1,5 @@
 import { gql, useQuery } from "@apollo/client";
+import { GetCartItemsQuery, useGetCartItemsQuery } from "./generated/graphql";
 
 function CartItem() {
   return <div>CartItem</div>;
@@ -11,11 +12,12 @@ export const GET_CART_ITEMS = gql`
 `;
 
 export function Cart() {
-  const { data, loading, error } = useQuery(GET_CART_ITEMS);
+  const { data, loading, error } = useGetCartItemsQuery();
 
   if (loading) return <div>loading...</div>;
   if (error) return <p>ERROR: {error.message}</p>;
   if (!data) return <div>empty data</div>;
+  if (!data.cartItems) return <div>empty data</div>;
 
   console.log("----------------------------");
   console.log(data);
