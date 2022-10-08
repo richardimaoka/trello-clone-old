@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
+import { draggedCard } from "./cache";
 import { CardComponentFragment } from "./generated/graphql";
 export interface CardComponentProps {
   fragment: CardComponentFragment;
@@ -15,9 +16,12 @@ export const CardComponent = ({ fragment }: CardComponentProps) => {
         padding: 10px;
         background-color: #ffffff;
       `}
-      // onClick={() => {
-      //   draggedCard(i++);
-      // }}
+      onClick={() => {
+        console.log("onClick");
+
+        draggedCard(i++);
+        console.log("set draggedCard = ", draggedCard());
+      }}
     >
       <div>{fragment.title}</div>
     </div>

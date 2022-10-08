@@ -19,8 +19,6 @@ export function Cart() {
   if (!data) return <div>empty data</div>;
   if (!data.cartItems) return <div>empty data</div>;
 
-  console.log("----------------------------");
-  console.log(data);
   return (
     <div>
       <div>My Cart</div>

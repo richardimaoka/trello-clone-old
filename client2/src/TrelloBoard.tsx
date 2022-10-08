@@ -9,7 +9,6 @@ import { ListComponent } from "./ListComponent";
 const QUERY = gql`
   query GetSearchResult {
     cartItems @client
-    draggedCard @client
     lists {
       title
       maxNumCards
@@ -40,7 +39,7 @@ export const TrelloBoard = () => {
     const lists = data.lists ? excludeNullFromArray<List>(data.lists) : [];
     return (
       <>
-        <div></div>
+        <div>{data.cartItems}</div>
         <div
           css={css`
             display: flex;
