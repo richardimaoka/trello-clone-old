@@ -41,6 +41,13 @@ export type Query = {
   lists: Maybe<Array<Maybe<List>>>;
 };
 
+export type CardComponentFragment = {
+  __typename?: "Card";
+  title: string | null;
+  description: string | null;
+  labels: Array<string | null> | null;
+};
+
 export type GetCartItemsQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetCartItemsQuery = {
@@ -48,6 +55,35 @@ export type GetCartItemsQuery = {
   cartItems: Array<number | null> | null;
 };
 
+export type ListComponentFragment = {
+  __typename?: "List";
+  title: string | null;
+  maxNumCards: number | null;
+  cards: Array<{
+    __typename?: "Card";
+    title: string | null;
+    description: string | null;
+    labels: Array<string | null> | null;
+  } | null> | null;
+};
+
+export const CardComponentFragmentDoc = gql`
+  fragment CardComponent on Card {
+    title
+    description
+    labels
+  }
+`;
+export const ListComponentFragmentDoc = gql`
+  fragment ListComponent on List {
+    title
+    maxNumCards
+    cards {
+      ...CardComponent
+    }
+  }
+  ${CardComponentFragmentDoc}
+`;
 export const GetCartItemsDocument = gql`
   query GetCartItems {
     cartItems @client
