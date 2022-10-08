@@ -1,16 +1,14 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import "./App.css";
+import { cartItemsVar, draggedCard } from "./cache";
 import { TrelloBoard } from "./TrelloBoard";
-import { draggedCard } from "./Cache";
 
 const client = new ApolloClient({
   uri: "http://localhost:4000",
   cache: new InMemoryCache({
     typePolicies: {
-      // Type policy map
       Query: {
         fields: {
-          // Field policy map for the Query type
           draggedCard: {
             // Field policy for the draggedCard field
             read(currentCacheValue, { args, variables }) {
@@ -27,33 +25,20 @@ const client = new ApolloClient({
               // );
             },
           },
-          // fullName: {
-          //   read(
-          //     full_name = {
-          //       first_name: "UNKNOWN FIRST_NAME",
-          //       last_name: "UNKNOWN LAST_NAME",
-          //     }
-          //   ) {
-          //     console.log("fullName read is called", { ...full_name });
-          //     return { ...full_name };
-          //   },
-          // },
-          // lists: {
-          //   read(currentValue) {
-          //     console.log("list read is called", currentValue);
-          //     return currentValue;
-          //   },
-          // },
         },
       },
     },
   }),
 });
 
-export const App = (): JSX.Element => {
+const Internal = () => <div>internal</div>;
+
+const App = () => {
   return (
     <ApolloProvider client={client}>
       <TrelloBoard />
     </ApolloProvider>
   );
 };
+
+export default App;

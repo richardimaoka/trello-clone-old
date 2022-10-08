@@ -2,17 +2,13 @@
 import { gql, useQuery } from "@apollo/client";
 import { css } from "@emotion/react";
 import { excludeNullFromArray } from "./excludeNullFromArray";
-import { GetSearchResultQuery, List } from "./generated/graphql";
+import { List, useGetSearchResultQuery } from "./generated/graphql";
 import { ListComponent } from "./ListComponent";
 
 //This is read by GraphQL codegen to generate types
 const QUERY = gql`
   query GetSearchResult {
     draggedCard @client
-    fullName @client {
-      firstName
-      lastName
-    }
     lists {
       title
       maxNumCards
@@ -26,8 +22,7 @@ const QUERY = gql`
 `;
 
 export const TrelloBoard = () => {
-  const { loading, error, data } = useQuery<GetSearchResultQuery>(QUERY);
-  // const { loading, error, data } = useGetSearchResultQuery();
+  const { loading, error, data } = useGetSearchResultQuery();
   console.log("---------------------");
   console.log(data);
 
@@ -44,9 +39,7 @@ export const TrelloBoard = () => {
     const lists = data.lists ? excludeNullFromArray<List>(data.lists) : [];
     return (
       <>
-        <div>
-          draggedCard = {data.draggedCard === null ? "null" : data.draggedCard}
-        </div>
+        <div>{data.draggedCard}</div>
         <div
           css={css`
             display: flex;
