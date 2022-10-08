@@ -11,18 +11,8 @@ const client = new ApolloClient({
         fields: {
           draggedCard: {
             // Field policy for the draggedCard field
-            read(currentCacheValue, { args, variables }) {
-              console.log(
-                "draggedCard read is called, currentCacheValue =",
-                currentCacheValue,
-                "draggedCard =",
-                draggedCard()
-              );
-              // The read function for the draggedCard field
+            read(_currentCacheValue, _options) {
               return draggedCard();
-              // return localStorage.getItem('CART').includes(
-              //   variables.productId
-              // );
             },
           },
         },

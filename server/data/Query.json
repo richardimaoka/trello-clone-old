@@ -1,6 +1,7 @@
 {
   "lists": [
     {
+      "id": "l-1",
       "title": "習慣・優先度高",
       "maxNumCards": 2,
       "cards": [
@@ -19,6 +20,7 @@
       ]
     },
     {
+      "id": "l-2",
       "title": "習慣・優先度低",
       "maxNumCards": 3,
       "cards": [
@@ -37,6 +39,7 @@
       ]
     },
     {
+      "id": "l-3",
       "title": "Ready",
       "maxNumCards": 5,
       "cards": [
@@ -67,6 +70,7 @@
       ]
     },
     {
+      "id": "l-4",
       "title": "On it < 60 min",
       "maxNumCards": 1,
       "cards": []

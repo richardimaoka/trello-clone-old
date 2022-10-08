@@ -32,6 +32,7 @@ export type Card = {
 export type List = {
   __typename?: "List";
   cards: Maybe<Array<Maybe<Card>>>;
+  id: Scalars["ID"];
   maxNumCards: Maybe<Scalars["Int"]>;
   title: Maybe<Scalars["String"]>;
 };
@@ -105,14 +106,10 @@ export const GetSearchResultDocument = gql`
   query GetSearchResult {
     draggedCard @client
     lists {
-      title
-      maxNumCards
-      cards {
-        ...CardComponent
-      }
+      ...ListComponent
     }
   }
-  ${CardComponentFragmentDoc}
+  ${ListComponentFragmentDoc}
 `;
 
 /**

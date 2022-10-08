@@ -3,6 +3,7 @@ type Query {
 }
 
 type List {
+  id: ID!
   title: String
   maxNumCards: Int
   cards: [Card]

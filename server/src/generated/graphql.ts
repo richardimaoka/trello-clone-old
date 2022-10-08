@@ -30,6 +30,7 @@ export type Card = {
 export type List = {
   __typename?: "List";
   cards: Maybe<Array<Maybe<Card>>>;
+  id: Scalars["ID"];
   maxNumCards: Maybe<Scalars["Int"]>;
   title: Maybe<Scalars["String"]>;
 };
@@ -194,6 +195,7 @@ export type ListResolvers<
     ParentType,
     ContextType
   >;
+  id: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
   maxNumCards: Resolver<Maybe<ResolversTypes["Int"]>, ParentType, ContextType>;
   title: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
