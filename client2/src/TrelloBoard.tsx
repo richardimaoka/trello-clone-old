@@ -8,7 +8,7 @@ import { ListComponent } from "./ListComponent";
 //This is read by GraphQL codegen to generate types
 const QUERY = gql`
   query GetSearchResult {
-    cartItems @client
+    draggedCard @client
     lists {
       title
       maxNumCards
@@ -39,7 +39,7 @@ export const TrelloBoard = () => {
     const lists = data.lists ? excludeNullFromArray<List>(data.lists) : [];
     return (
       <>
-        <div>{data.cartItems}</div>
+        <div>{data.draggedCard}</div>
         <div
           css={css`
             display: flex;

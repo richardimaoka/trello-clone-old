@@ -72,7 +72,7 @@ export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSearchResultQuery = {
   __typename?: "Query";
-  cartItems: Array<number | null> | null;
+  draggedCard: number | null;
   lists: Array<{
     __typename?: "List";
     title: string | null;
@@ -160,7 +160,7 @@ export type GetCartItemsQueryResult = Apollo.QueryResult<
 >;
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
-    cartItems @client
+    draggedCard @client
     lists {
       title
       maxNumCards

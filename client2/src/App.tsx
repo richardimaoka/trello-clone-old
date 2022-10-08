@@ -1,7 +1,7 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import { AddToCartButton } from "./AddToCartButton";
 import "./App.css";
-import { cartItemsVar } from "./cache";
+import { cartItemsVar, draggedCard } from "./cache";
 import { Cart } from "./Cart";
 import { TrelloBoard } from "./TrelloBoard";
 
@@ -20,6 +20,22 @@ const client = new ApolloClient({
                 cartItemsVar()
               );
               return cartItemsVar();
+            },
+          },
+          draggedCard: {
+            // Field policy for the draggedCard field
+            read(currentCacheValue, { args, variables }) {
+              console.log(
+                "draggedCard read is called, currentCacheValue =",
+                currentCacheValue,
+                "draggedCard =",
+                draggedCard()
+              );
+              // The read function for the draggedCard field
+              return draggedCard();
+              // return localStorage.getItem('CART').includes(
+              //   variables.productId
+              // );
             },
           },
         },
