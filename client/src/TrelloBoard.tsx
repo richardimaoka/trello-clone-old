@@ -13,10 +13,7 @@ const QUERY = gql`
       title
       maxNumCards
       cards {
-        id
-        title
-        description
-        labels
+        ...CardComponent
       }
     }
   }
