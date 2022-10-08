@@ -6,7 +6,6 @@ export function AddToCartButton({ productId }: { productId: number }) {
     <div>
       <button
         onClick={() => {
-          console.log("AddToCartButton onClick clicked");
           cartItemsVar([...cartItemsVar(), productId]);
         }}
       >

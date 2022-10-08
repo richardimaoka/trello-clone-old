@@ -5,7 +5,7 @@ import { cartItemsVar } from "./cache";
 import { Cart } from "./Cart";
 
 const client = new ApolloClient({
-  uri: "https://flyby-gateway.herokuapp.com/",
+  uri: "http://localhost:4000",
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
