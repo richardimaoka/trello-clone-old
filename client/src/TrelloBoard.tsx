@@ -8,8 +8,8 @@ import {
 } from "./generated/graphql";
 import { ListComponent } from "./ListComponent";
 
-//This is read by GraphQL codegen to generate types
-const QUERY = gql`
+//const QUERY = gql`...` will cause `'QUERY' is declared but its value is never read`
+gql`
   query GetSearchResult {
     draggedCard @client
     cardAdding @client {
