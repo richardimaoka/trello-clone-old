@@ -42,6 +42,7 @@ export const ListComponent = ({ fragment, showInput }: ListComponentProps) => {
     const ca = cardAdding();
     if (ca?.listId && ca.inputText) {
       addCardToList({ variables: { listId: ca.listId, title: ca.inputText } });
+      cardAdding(null);
     }
   };
 
@@ -84,10 +85,12 @@ export const ListComponent = ({ fragment, showInput }: ListComponentProps) => {
             <input
               ref={el}
               type="text"
-              // onBlur={clearCardAdding}
               onChange={asTyped}
               value={inputText ? inputText : ""}
             />
+            <button type="button" onClick={clearCardAdding}>
+              x
+            </button>
             <button type="button" onClick={reallyAddCard}>
               really add a card
             </button>
