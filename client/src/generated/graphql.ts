@@ -104,6 +104,7 @@ export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 export type GetSearchResultQuery = {
   __typename?: "Query";
   draggedCardId: string | null;
+  overlaidCardId: string | null;
   cardAdding: {
     __typename?: "CardAdding";
     listId: string | null;
@@ -195,6 +196,7 @@ export type AddCardToListMutationOptions = Apollo.BaseMutationOptions<
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
     draggedCardId @client
+    overlaidCardId @client
     cardAdding @client {
       listId
       inputText

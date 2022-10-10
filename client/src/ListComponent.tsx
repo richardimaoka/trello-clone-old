@@ -2,7 +2,7 @@
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { ChangeEventHandler, useEffect, useRef } from "react";
-import { cardAdding } from "./cache";
+import { cardAdding, overlaidCardId } from "./cache";
 import { CardComponent } from "./CardComponent";
 import { excludeNullFromArray } from "./excludeNullFromArray";
 import {
@@ -14,6 +14,7 @@ import {
 export interface ListComponentProps {
   fragment: ListComponentFragment;
   showInput: boolean;
+  overlaidCardId: string | null;
 }
 
 gql`
@@ -22,7 +23,11 @@ gql`
   }
 `;
 
-export const ListComponent = ({ fragment, showInput }: ListComponentProps) => {
+export const ListComponent = ({
+  fragment,
+  showInput,
+  overlaidCardId,
+}: ListComponentProps) => {
   const el = useRef<HTMLInputElement>(null);
   const [addCardToList, { data, loading, error }] = useAddCardToListMutation({
     refetchQueries: ["GetSearchResult"],
@@ -74,7 +79,11 @@ export const ListComponent = ({ fragment, showInput }: ListComponentProps) => {
     >
       <div>{fragment.title}</div>
       {cards.map((c, index) => (
-        <CardComponent key={index} fragment={c} />
+        <CardComponent
+          key={index}
+          fragment={c}
+          overlaidCardId={overlaidCardId}
+        />
       ))}
 
       {showInput ? (

@@ -12,6 +12,7 @@ import { ListComponent } from "./ListComponent";
 gql`
   query GetSearchResult {
     draggedCardId @client
+    overlaidCardId @client
     cardAdding @client {
       listId
       inputText
@@ -45,6 +46,7 @@ export const TrelloBoard = () => {
           <ListComponent
             key={index}
             fragment={l}
+            overlaidCardId={data.overlaidCardId}
             showInput={data.cardAdding?.listId === l.id}
           />
         ))}
