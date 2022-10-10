@@ -74,7 +74,10 @@ export type CardComponentFragment = {
   labels: Array<string | null> | null;
 };
 
-export type AddCardToListMutationVariables = Exact<{ [key: string]: never }>;
+export type AddCardToListMutationVariables = Exact<{
+  listId: Scalars["ID"];
+  title: InputMaybe<Scalars["String"]>;
+}>;
 
 export type AddCardToListMutation = {
   __typename?: "Mutation";
@@ -140,8 +143,8 @@ export const ListComponentFragmentDoc = gql`
   ${CardComponentFragmentDoc}
 `;
 export const AddCardToListDocument = gql`
-  mutation addCardToList {
-    addCardToList(listId: "l-2", card: { title: "cardTitle" })
+  mutation addCardToList($listId: ID!, $title: String) {
+    addCardToList(listId: $listId, card: { title: $title })
   }
 `;
 export type AddCardToListMutationFn = Apollo.MutationFunction<
@@ -162,6 +165,8 @@ export type AddCardToListMutationFn = Apollo.MutationFunction<
  * @example
  * const [addCardToListMutation, { data, loading, error }] = useAddCardToListMutation({
  *   variables: {
+ *      listId: // value for 'listId'
+ *      title: // value for 'title'
  *   },
  * });
  */

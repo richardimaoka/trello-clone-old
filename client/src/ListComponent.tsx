@@ -1,16 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import { gql, useMutation } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
+import { ChangeEventHandler, useEffect, useRef } from "react";
+import { cardAdding } from "./cache";
+import { CardComponent } from "./CardComponent";
+import { excludeNullFromArray } from "./excludeNullFromArray";
 import {
-  Card,
   CardComponentFragment,
   ListComponentFragment,
   useAddCardToListMutation,
 } from "./generated/graphql";
-import { CardComponent } from "./CardComponent";
-import { excludeNullFromArray } from "./excludeNullFromArray";
-import { cardAdding } from "./cache";
-import { ChangeEventHandler, useEffect, useRef } from "react";
 
 export interface ListComponentProps {
   fragment: ListComponentFragment;
@@ -18,16 +17,16 @@ export interface ListComponentProps {
 }
 
 gql`
-  mutation addCardToList {
-    addCardToList(listId: "l-2", card: { title: "cardTitle" })
+  mutation addCardToList($listId: ID!, $title: String!) {
+    addCardToList(listId: $listId, card: { title: $title })
   }
 `;
 
 export const ListComponent = ({ fragment, showInput }: ListComponentProps) => {
+  const el = useRef<HTMLInputElement>(null);
   const [addCardToList, { data, loading, error }] = useAddCardToListMutation({
     refetchQueries: ["GetSearchResult"],
   });
-  const el = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (el.current) {
@@ -39,9 +38,11 @@ export const ListComponent = ({ fragment, showInput }: ListComponentProps) => {
     ? excludeNullFromArray<CardComponentFragment>(fragment.cards)
     : [];
 
-  const addCard = () => {
-    console.log("adding a card");
-    addCardToList();
+  const reallyAddCard = () => {
+    const ca = cardAdding();
+    if (ca?.listId && ca.inputText) {
+      addCardToList({ variables: { listId: ca.listId, title: ca.inputText } });
+    }
   };
 
   const addingCardOnClick = () => {
@@ -76,16 +77,21 @@ export const ListComponent = ({ fragment, showInput }: ListComponentProps) => {
 
       {showInput ? (
         <div>
-          <div>
+          <form
+          // React's onBlur bubbles, so it is more like HTML focusout rather than HTML blur. See https://reactjs.org/docs/events.html#focus-events
+          // onBlur={clearCardAdding}
+          >
             <input
               ref={el}
               type="text"
-              onBlur={clearCardAdding}
+              // onBlur={clearCardAdding}
               onChange={asTyped}
               value={inputText ? inputText : ""}
             />
-          </div>
-          <button>really add a card</button>
+            <button type="button" onClick={reallyAddCard}>
+              really add a card
+            </button>
+          </form>
         </div>
       ) : (
         <button onClick={addingCardOnClick}>Add a card</button>

@@ -16,12 +16,6 @@ const client = new ApolloClient({
           },
           cardAdding: {
             read(_currentCacheValue, _options) {
-              console.log(
-                "cardAdding:",
-                _currentCacheValue,
-                "cardAdding = ",
-                cardAdding()
-              );
               return cardAdding();
             },
           },
