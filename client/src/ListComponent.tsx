@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 import { css } from "@emotion/react";
 import {
   Card,
+  CardComponentFragment,
   ListComponentFragment,
   useAddCardToListMutation,
 } from "./generated/graphql";
@@ -20,14 +21,16 @@ gql`
 `;
 
 export const ListComponent = ({ fragment }: ListComponentProps) => {
+  const [addCardToList, { data, loading, error }] = useAddCardToListMutation({
+    refetchQueries: ["GetSearchResult"],
+  });
   const cards = fragment.cards
-    ? excludeNullFromArray<Card>(fragment.cards)
+    ? excludeNullFromArray<CardComponentFragment>(fragment.cards)
     : [];
-  const [mutateFunction, { data, loading, error }] = useAddCardToListMutation();
 
   const addCard = () => {
     console.log("adding a card");
-    mutateFunction();
+    addCardToList();
   };
 
   return (

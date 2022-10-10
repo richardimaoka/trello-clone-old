@@ -33,7 +33,7 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     else listToUpdate.cards.push(card);
 
     console.log(
-      `card { title: ${card.title} } is added to list { title: ${listToUpdate.title}}`
+      `card { title: ${card.title} } is added to list { title: ${listToUpdate.title} }`
     );
 
     return 10;
