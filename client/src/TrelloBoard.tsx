@@ -42,7 +42,11 @@ export const TrelloBoard = () => {
         `}
       >
         {lists.map((l, index) => (
-          <ListComponent key={index} fragment={l} disableAddCard={true} />
+          <ListComponent
+            key={index}
+            fragment={l}
+            disableAddCard={data.cardAdding !== null}
+          />
         ))}
       </div>
     </>
