@@ -45,7 +45,9 @@ export const TrelloBoard = () => {
           <ListComponent
             key={index}
             fragment={l}
-            disableAddCard={data.cardAdding !== null}
+            showInput={
+              data.cardAdding !== null && data.cardAdding.listId === l.id
+            }
           />
         ))}
       </div>
