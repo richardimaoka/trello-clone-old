@@ -29,6 +29,11 @@ export type Card = {
   title: Maybe<Scalars["String"]>;
 };
 
+export type CardAdding = {
+  __typename?: "CardAdding";
+  listId: Maybe<Scalars["ID"]>;
+};
+
 export type CardInput = {
   description: InputMaybe<Scalars["String"]>;
   title: InputMaybe<Scalars["String"]>;
@@ -54,6 +59,7 @@ export type MutationAddCardToListArgs = {
 
 export type Query = {
   __typename?: "Query";
+  cardAdding: Maybe<CardAdding>;
   cartItems: Maybe<Array<Maybe<Scalars["Int"]>>>;
   draggedCard: Maybe<Scalars["ID"]>;
   lists: Maybe<Array<Maybe<List>>>;
@@ -76,6 +82,7 @@ export type AddCardToListMutation = {
 
 export type ListComponentFragment = {
   __typename?: "List";
+  id: string;
   title: string | null;
   maxNumCards: number | null;
   cards: Array<{
@@ -92,8 +99,10 @@ export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 export type GetSearchResultQuery = {
   __typename?: "Query";
   draggedCard: string | null;
+  cardAdding: { __typename?: "CardAdding"; listId: string | null } | null;
   lists: Array<{
     __typename?: "List";
+    id: string;
     title: string | null;
     maxNumCards: number | null;
     cards: Array<{
@@ -116,6 +125,7 @@ export const CardComponentFragmentDoc = gql`
 `;
 export const ListComponentFragmentDoc = gql`
   fragment ListComponent on List {
+    id
     title
     maxNumCards
     cards {
@@ -174,6 +184,9 @@ export type AddCardToListMutationOptions = Apollo.BaseMutationOptions<
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
     draggedCard @client
+    cardAdding @client {
+      listId
+    }
     lists {
       ...ListComponent
     }

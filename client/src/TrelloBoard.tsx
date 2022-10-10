@@ -12,6 +12,9 @@ import { ListComponent } from "./ListComponent";
 const QUERY = gql`
   query GetSearchResult {
     draggedCard @client
+    cardAdding @client {
+      listId
+    }
     lists {
       ...ListComponent
     }

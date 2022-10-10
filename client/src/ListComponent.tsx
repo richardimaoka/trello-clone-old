@@ -9,6 +9,7 @@ import {
 } from "./generated/graphql";
 import { CardComponent } from "./CardComponent";
 import { excludeNullFromArray } from "./excludeNullFromArray";
+import { cardAdding } from "./cache";
 
 export interface ListComponentProps {
   fragment: ListComponentFragment;
@@ -33,6 +34,10 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
     addCardToList();
   };
 
+  const addingCardOnClick = () => {
+    cardAdding({ listId: fragment.id });
+  };
+
   return (
     <div
       css={css`
@@ -45,13 +50,14 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
       {cards.map((c, index) => (
         <CardComponent key={index} fragment={c} />
       ))}
-      <button onClick={addCard}>Add a card</button>
+      <button onClick={addingCardOnClick}>Add a card</button>
     </div>
   );
 };
 
 ListComponent.fragment = gql`
   fragment ListComponent on List {
+    id
     title
     maxNumCards
     cards {
