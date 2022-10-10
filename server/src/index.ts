@@ -18,8 +18,21 @@ const resolvers = {
     },
   },
   Mutation: {
-    addCardToList: async (listId: string, card: CardInput) => {
+    addCardToList: async (
+      _parent: any,
+      { listId, card }: any,
+      _context: any
+    ) => {
       console.log("addCardToList");
+      const lists = _context.Query.lists;
+      const listToUpdate = lists.find((elem: any) => elem.id === listId);
+      if (listToUpdate) {
+        card["id"] = "abcede";
+        const newCard = Object.assign({}, card); // to fix toString() [Object: null prototype] problem
+        listToUpdate.cards.push(newCard);
+        console.log(typeof newCard);
+        console.log(listToUpdate);
+      }
     },
   },
   // List: {
@@ -49,29 +62,20 @@ const resolvers = {
   // },
 };
 
-const readJsonFile = async (relativeFileName: string): Promise<any> => {
+const readJsonFileSync = (relativeFileName: string): Promise<any> => {
   const jsonDataFile = __dirname.concat(relativeFileName);
-  const fileContent = await fs.promises.readFile(jsonDataFile, "utf8");
+  const fileContent = fs.readFileSync(jsonDataFile, "utf8");
   const jsonData = JSON.parse(fileContent);
   return jsonData;
 };
 
+//throws on error
+const queryDataSync = readJsonFileSync("/../data/Query.json");
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async ({ req }: any) => {
-    console.log("context loaded");
-    try {
-      const queryData: LoadingDataContext = await readJsonFile(
-        "/../data/Query.json"
-      );
-      return { Query: queryData };
-    } catch (err) {
-      console.log("***ERROR OCURRED***");
-      console.log(err);
-      throw new Error("internal error happened!!");
-    }
-  },
+  context: { Query: queryDataSync },
 });
 
 // The `listen` method launches a web server.
