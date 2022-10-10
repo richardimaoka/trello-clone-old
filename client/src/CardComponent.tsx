@@ -1,24 +1,43 @@
 /** @jsxImportSource @emotion/react */
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
-import { draggedCard } from "./cache";
+import { DragEventHandler } from "react";
+import { draggedCardId, overlaidCardId } from "./cache";
 import { CardComponentFragment } from "./generated/graphql";
 export interface CardComponentProps {
   fragment: CardComponentFragment;
 }
 
 export const CardComponent = ({ fragment }: CardComponentProps) => {
+  const backgroundColor =
+    fragment.id === draggedCardId()
+      ? "#6d6060"
+      : fragment.id === overlaidCardId()
+      ? "#80dbff"
+      : "#ffffff";
+
+  const setDraggedCardId = () => {
+    draggedCardId(fragment.id);
+  };
+  const unSetDraggedCardId = () => {
+    draggedCardId("");
+  };
+  const setOverlaidCardId: DragEventHandler<HTMLDivElement> = (e) => {
+    if (fragment.id !== draggedCardId()) {
+      overlaidCardId(fragment.id);
+    }
+  };
+
   return (
     <div
       draggable={true}
       css={css`
         padding: 10px;
-        background-color: #ffffff;
+        background-color: ${backgroundColor};
       `}
-      onDragStart={() => {
-        draggedCard(fragment.id);
-        console.log("set draggedCard = ", draggedCard());
-      }}
+      onDragStart={setDraggedCardId}
+      onDragEnd={unSetDraggedCardId}
+      onDragEnter={setOverlaidCardId}
     >
       <div>{fragment.title}</div>
     </div>

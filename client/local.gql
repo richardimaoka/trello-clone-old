@@ -1,5 +1,6 @@
 type Query {
-  draggedCard: ID
+  draggedCardId: ID
+  overlaidCardId: ID
   cartItems: [Int]
   cardAdding: CardAdding
 }

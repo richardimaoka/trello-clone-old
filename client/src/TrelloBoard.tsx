@@ -11,7 +11,7 @@ import { ListComponent } from "./ListComponent";
 //const QUERY = gql`...` will cause `'QUERY' is declared but its value is never read`
 gql`
   query GetSearchResult {
-    draggedCard @client
+    draggedCardId @client
     cardAdding @client {
       listId
       inputText
@@ -35,7 +35,6 @@ export const TrelloBoard = () => {
 
   return (
     <>
-      <div>{data.draggedCard}</div>
       <div
         css={css`
           display: flex;
@@ -46,9 +45,7 @@ export const TrelloBoard = () => {
           <ListComponent
             key={index}
             fragment={l}
-            showInput={
-              data.cardAdding !== null && data.cardAdding.listId === l.id
-            }
+            showInput={data.cardAdding?.listId === l.id}
           />
         ))}
       </div>

@@ -1,6 +1,6 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import "./App.css";
-import { cardAdding, cartItemsVar, draggedCard } from "./cache";
+import { cardAdding, draggedCardId } from "./cache";
 import { TrelloBoard } from "./TrelloBoard";
 
 const client = new ApolloClient({
@@ -9,9 +9,9 @@ const client = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          draggedCard: {
+          draggedCardId: {
             read(_currentCacheValue, _options) {
-              return draggedCard();
+              return draggedCardId();
             },
           },
           cardAdding: {

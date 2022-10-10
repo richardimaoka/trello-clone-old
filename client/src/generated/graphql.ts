@@ -62,8 +62,9 @@ export type Query = {
   __typename?: "Query";
   cardAdding: Maybe<CardAdding>;
   cartItems: Maybe<Array<Maybe<Scalars["Int"]>>>;
-  draggedCard: Maybe<Scalars["ID"]>;
+  draggedCardId: Maybe<Scalars["ID"]>;
   lists: Maybe<Array<Maybe<List>>>;
+  overlaidCardId: Maybe<Scalars["ID"]>;
 };
 
 export type CardComponentFragment = {
@@ -76,7 +77,7 @@ export type CardComponentFragment = {
 
 export type AddCardToListMutationVariables = Exact<{
   listId: Scalars["ID"];
-  title: InputMaybe<Scalars["String"]>;
+  title: Scalars["String"];
 }>;
 
 export type AddCardToListMutation = {
@@ -102,7 +103,7 @@ export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSearchResultQuery = {
   __typename?: "Query";
-  draggedCard: string | null;
+  draggedCardId: string | null;
   cardAdding: {
     __typename?: "CardAdding";
     listId: string | null;
@@ -143,7 +144,7 @@ export const ListComponentFragmentDoc = gql`
   ${CardComponentFragmentDoc}
 `;
 export const AddCardToListDocument = gql`
-  mutation addCardToList($listId: ID!, $title: String) {
+  mutation addCardToList($listId: ID!, $title: String!) {
     addCardToList(listId: $listId, card: { title: $title })
   }
 `;
@@ -193,7 +194,7 @@ export type AddCardToListMutationOptions = Apollo.BaseMutationOptions<
 >;
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
-    draggedCard @client
+    draggedCardId @client
     cardAdding @client {
       listId
       inputText

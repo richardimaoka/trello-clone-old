@@ -47,6 +47,7 @@ export const ListComponent = ({ fragment, showInput }: ListComponentProps) => {
   };
 
   const addingCardOnClick = () => {
+    console.log("addingCardOnClick");
     cardAdding({ listId: fragment.id, inputText: "" });
   };
 
