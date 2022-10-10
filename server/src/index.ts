@@ -1,13 +1,8 @@
-import { Card } from "./../../client/src/generated/graphql";
 import { ApolloServer, gql } from "apollo-server";
-import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
-import {
-  CardInput,
-  MutationResolvers,
-  Query,
-  Resolvers,
-} from "./generated/graphql";
+import { v4 as uuidv4 } from "uuid";
+import { Card } from "./../../client/src/generated/graphql";
+import { MutationResolvers, Query } from "./generated/graphql";
 
 const typeDefs = gql`
   ${fs.readFileSync(__dirname.concat("/../schema.gql"), "utf8")}
@@ -25,7 +20,7 @@ const queryResolvers = {
 
 const mutationResolvers: MutationResolvers<LoadingDataContext> = {
   addCardToList: async (_parent, args, _context) => {
-    console.log("addCardToList");
+    // console.log("addCardToList");
     const lists = _context.Query.lists;
     if (!lists) throw new Error("empty lists in Query");
 
@@ -36,6 +31,10 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     const card = Object.assign({ id: uuidv4() }, args.card) as Card;
     if (!listToUpdate.cards) listToUpdate.cards = [card];
     else listToUpdate.cards.push(card);
+
+    console.log(
+      `card { title: ${card.title} } is added to list { title: ${listToUpdate.title}}`
+    );
 
     return 10;
   },

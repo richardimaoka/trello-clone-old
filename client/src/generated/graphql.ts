@@ -67,6 +67,13 @@ export type CardComponentFragment = {
   labels: Array<string | null> | null;
 };
 
+export type AddCardToListMutationVariables = Exact<{ [key: string]: never }>;
+
+export type AddCardToListMutation = {
+  __typename?: "Mutation";
+  addCardToList: number | null;
+};
+
 export type ListComponentFragment = {
   __typename?: "List";
   title: string | null;
@@ -117,6 +124,53 @@ export const ListComponentFragmentDoc = gql`
   }
   ${CardComponentFragmentDoc}
 `;
+export const AddCardToListDocument = gql`
+  mutation addCardToList {
+    addCardToList(listId: "l-2", card: { title: "cardTitle" })
+  }
+`;
+export type AddCardToListMutationFn = Apollo.MutationFunction<
+  AddCardToListMutation,
+  AddCardToListMutationVariables
+>;
+
+/**
+ * __useAddCardToListMutation__
+ *
+ * To run a mutation, you first call `useAddCardToListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCardToListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCardToListMutation, { data, loading, error }] = useAddCardToListMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAddCardToListMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddCardToListMutation,
+    AddCardToListMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddCardToListMutation,
+    AddCardToListMutationVariables
+  >(AddCardToListDocument, options);
+}
+export type AddCardToListMutationHookResult = ReturnType<
+  typeof useAddCardToListMutation
+>;
+export type AddCardToListMutationResult =
+  Apollo.MutationResult<AddCardToListMutation>;
+export type AddCardToListMutationOptions = Apollo.BaseMutationOptions<
+  AddCardToListMutation,
+  AddCardToListMutationVariables
+>;
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
     draggedCard @client
