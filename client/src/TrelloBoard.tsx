@@ -37,6 +37,7 @@ export const TrelloBoard = () => {
     const lists = data.lists
       ? excludeNullFromArray<ListComponentFragment>(data.lists)
       : [];
+
     return (
       <>
         <div>{data.draggedCard}</div>
@@ -47,7 +48,7 @@ export const TrelloBoard = () => {
           `}
         >
           {lists.map((l, index) => (
-            <ListComponent key={index} fragment={l} />
+            <ListComponent key={index} fragment={l} disableAddCard={true} />
           ))}
         </div>
       </>

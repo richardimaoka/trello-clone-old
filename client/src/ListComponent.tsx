@@ -13,6 +13,7 @@ import { cardAdding } from "./cache";
 
 export interface ListComponentProps {
   fragment: ListComponentFragment;
+  disableAddCard: boolean;
 }
 
 gql`
@@ -21,7 +22,10 @@ gql`
   }
 `;
 
-export const ListComponent = ({ fragment }: ListComponentProps) => {
+export const ListComponent = ({
+  fragment,
+  disableAddCard,
+}: ListComponentProps) => {
   const [addCardToList, { data, loading, error }] = useAddCardToListMutation({
     refetchQueries: ["GetSearchResult"],
   });
@@ -50,7 +54,9 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
       {cards.map((c, index) => (
         <CardComponent key={index} fragment={c} />
       ))}
-      <button onClick={addingCardOnClick}>Add a card</button>
+      <button onClick={addingCardOnClick} disabled={disableAddCard}>
+        Add a card
+      </button>
     </div>
   );
 };
