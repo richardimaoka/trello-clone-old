@@ -14,6 +14,7 @@ gql`
     draggedCard @client
     cardAdding @client {
       listId
+      inputText
     }
     lists {
       ...ListComponent

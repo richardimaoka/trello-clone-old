@@ -10,7 +10,7 @@ import {
 import { CardComponent } from "./CardComponent";
 import { excludeNullFromArray } from "./excludeNullFromArray";
 import { cardAdding } from "./cache";
-import { useEffect, useRef } from "react";
+import { ChangeEventHandler, useEffect, useRef } from "react";
 
 export interface ListComponentProps {
   fragment: ListComponentFragment;
@@ -45,12 +45,21 @@ export const ListComponent = ({ fragment, showInput }: ListComponentProps) => {
   };
 
   const addingCardOnClick = () => {
-    cardAdding({ listId: fragment.id });
+    cardAdding({ listId: fragment.id, inputText: "" });
   };
 
   const clearCardAdding = () => {
     cardAdding(null);
   };
+
+  const asTyped: ChangeEventHandler<HTMLInputElement> = (event) => {
+    const ca = cardAdding();
+    if (ca?.listId) {
+      cardAdding({ listId: ca?.listId, inputText: event.target.value });
+    }
+  };
+
+  const inputText = cardAdding()?.inputText;
 
   return (
     <div
@@ -64,13 +73,22 @@ export const ListComponent = ({ fragment, showInput }: ListComponentProps) => {
       {cards.map((c, index) => (
         <CardComponent key={index} fragment={c} />
       ))}
-      <button onClick={addingCardOnClick}>Add a card</button>
+
       {showInput ? (
         <div>
-          <input ref={el} type="text" onBlur={clearCardAdding} />
+          <div>
+            <input
+              ref={el}
+              type="text"
+              onBlur={clearCardAdding}
+              onChange={asTyped}
+              value={inputText ? inputText : ""}
+            />
+          </div>
+          <button>really add a card</button>
         </div>
       ) : (
-        <></>
+        <button onClick={addingCardOnClick}>Add a card</button>
       )}
     </div>
   );

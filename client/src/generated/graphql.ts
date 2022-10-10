@@ -31,6 +31,7 @@ export type Card = {
 
 export type CardAdding = {
   __typename?: "CardAdding";
+  inputText: Maybe<Scalars["String"]>;
   listId: Maybe<Scalars["ID"]>;
 };
 
@@ -99,7 +100,11 @@ export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 export type GetSearchResultQuery = {
   __typename?: "Query";
   draggedCard: string | null;
-  cardAdding: { __typename?: "CardAdding"; listId: string | null } | null;
+  cardAdding: {
+    __typename?: "CardAdding";
+    listId: string | null;
+    inputText: string | null;
+  } | null;
   lists: Array<{
     __typename?: "List";
     id: string;
@@ -186,6 +191,7 @@ export const GetSearchResultDocument = gql`
     draggedCard @client
     cardAdding @client {
       listId
+      inputText
     }
     lists {
       ...ListComponent
