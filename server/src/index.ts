@@ -10,37 +10,38 @@ interface LoadingDataContext {
   Query: Query;
 }
 
-const resolvers: Resolvers<LoadingDataContext> = {
+//const resolvers: Resolvers<LoadingDataContext> = {
+const resolvers = {
   Query: {
-    lists: async (_parent, _args, context, _info) => {
+    lists: async (_parent: any, _args: any, context: any, _info: any) => {
       return context.Query.lists;
     },
   },
-  List: {
-    title: async (parent, _args, _content, _info) => {
-      return parent.title;
-    },
-    maxNumCards: async (parent, _args, _content, _info) => {
-      return parent.maxNumCards;
-    },
-    cards: async (parent, _args, _content, _info) => {
-      return parent.cards;
-    },
-  },
-  Card: {
-    id: async (parent, _args, _content, _info) => {
-      return parent.id;
-    },
-    title: async (parent, _args, _content, _info) => {
-      return parent.title;
-    },
-    description: async (parent, _args, _content, _info) => {
-      return parent.description;
-    },
-    labels: async (parent, _args, _content, _info) => {
-      return parent.labels;
-    },
-  },
+  // List: {
+  //   id: async (parent, _args, _content, _info) => {
+  //     return parent.id;
+  //   },
+  //   title: async (parent, _args, _content, _info) => {
+  //     return parent.title;
+  //   },
+  //   maxNumCards: async (parent, _args, _content, _info) => {
+  //     return parent.maxNumCards;
+  //   },
+  //   cards: async (parent, _args, _content, _info) => {
+  //     return parent.cards;
+  //   },
+  // },
+  // Card: {
+  //   title: async (parent, _args, _content, _info) => {
+  //     return parent.title;
+  //   },
+  //   description: async (parent, _args, _content, _info) => {
+  //     return parent.description;
+  //   },
+  //   labels: async (parent, _args, _content, _info) => {
+  //     return parent.labels;
+  //   },
+  // },
 };
 
 const readJsonFile = async (relativeFileName: string): Promise<any> => {

@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { excludeNullFromArray } from "./excludeNullFromArray";
 import {
-  List,
   ListComponentFragment,
   useGetSearchResultQuery,
 } from "./generated/graphql";
