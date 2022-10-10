@@ -24,34 +24,27 @@ const QUERY = gql`
 export const TrelloBoard = () => {
   const { loading, error, data } = useGetSearchResultQuery();
 
-  if (loading) {
-    console.log("loading TrelloBoard");
-    return <div>loading...</div>;
-  } else if (error) {
-    console.log("error TrelloBoard", error.message);
-    return <div>error happened {error.message}</div>;
-  } else if (!data) {
-    console.log("error 2 TrelloBoard empty data");
-    return <div>error happened</div>;
-  } else {
-    const lists = data.lists
-      ? excludeNullFromArray<ListComponentFragment>(data.lists)
-      : [];
+  if (loading) return <div>loading...</div>;
+  if (error) return <div>error happened {error.message}</div>;
+  if (!data) return <div>error happened empty data</div>;
 
-    return (
-      <>
-        <div>{data.draggedCard}</div>
-        <div
-          css={css`
-            display: flex;
-            column-gap: 10px;
-          `}
-        >
-          {lists.map((l, index) => (
-            <ListComponent key={index} fragment={l} disableAddCard={true} />
-          ))}
-        </div>
-      </>
-    );
-  }
+  const lists = data.lists
+    ? excludeNullFromArray<ListComponentFragment>(data.lists)
+    : [];
+
+  return (
+    <>
+      <div>{data.draggedCard}</div>
+      <div
+        css={css`
+          display: flex;
+          column-gap: 10px;
+        `}
+      >
+        {lists.map((l, index) => (
+          <ListComponent key={index} fragment={l} disableAddCard={true} />
+        ))}
+      </div>
+    </>
+  );
 };
