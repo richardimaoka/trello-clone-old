@@ -37,6 +37,12 @@ export const CardComponent = ({
       makeOverlaidCardId(fragment.id);
     }
   };
+  const handleDragOver = (e: any) => {
+    e.preventDefault(); //this is necessary for onDrag to fire
+  };
+  const swapCards = (e: any) => {
+    console.log("swap cardds");
+  };
 
   return (
     <div
@@ -48,6 +54,8 @@ export const CardComponent = ({
       onDragStart={setDraggedCardId}
       onDragEnd={clearDragAndOverlay}
       onDragEnter={setOverlaidCardId}
+      onDragOver={handleDragOver}
+      onDrop={swapCards}
     >
       <div>{fragment.title}</div>
     </div>
