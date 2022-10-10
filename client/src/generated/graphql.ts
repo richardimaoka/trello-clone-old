@@ -45,18 +45,11 @@ export type List = {
 export type Mutation = {
   __typename?: "Mutation";
   addCardToList: Maybe<Scalars["Int"]>;
-  insertCardToList: Maybe<Scalars["Int"]>;
 };
 
 export type MutationAddCardToListArgs = {
-  card: InputMaybe<CardInput>;
-  listId: InputMaybe<Scalars["ID"]>;
-};
-
-export type MutationInsertCardToListArgs = {
-  atIndex: InputMaybe<Scalars["Int"]>;
-  cardId: InputMaybe<Scalars["ID"]>;
-  listId: InputMaybe<Scalars["ID"]>;
+  card: CardInput;
+  listId: Scalars["ID"];
 };
 
 export type Query = {

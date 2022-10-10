@@ -1,6 +1,13 @@
+import { Card } from "./../../client/src/generated/graphql";
 import { ApolloServer, gql } from "apollo-server";
+import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
-import { CardInput, Query, Resolvers } from "./generated/graphql";
+import {
+  CardInput,
+  MutationResolvers,
+  Query,
+  Resolvers,
+} from "./generated/graphql";
 
 const typeDefs = gql`
   ${fs.readFileSync(__dirname.concat("/../schema.gql"), "utf8")}
@@ -11,61 +18,62 @@ interface LoadingDataContext {
 }
 
 const queryResolvers = {
-  Query: {
-    lists: async (_parent: any, _args: any, context: any, _info: any) => {
-      return context.Query.lists;
-    },
+  lists: async (_parent: any, _args: any, context: any, _info: any) => {
+    return context.Query.lists;
   },
-  // List: {
-  //   id: async (parent, _args, _content, _info) => {
-  //     return parent.id;
-  //   },
-  //   title: async (parent, _args, _content, _info) => {
-  //     return parent.title;
-  //   },
-  //   maxNumCards: async (parent, _args, _content, _info) => {
-  //     return parent.maxNumCards;
-  //   },
-  //   cards: async (parent, _args, _content, _info) => {
-  //     return parent.cards;
-  //   },
-  // },
-  // Card: {
-  //   title: async (parent, _args, _content, _info) => {
-  //     return parent.title;
-  //   },
-  //   description: async (parent, _args, _content, _info) => {
-  //     return parent.description;
-  //   },
-  //   labels: async (parent, _args, _content, _info) => {
-  //     return parent.labels;
-  //   },
-  // },
 };
 
-const mutationResolvers = {
-  Mutation: {
-    addCardToList: async (
-      _parent: any,
-      { listId, card }: any,
-      _context: any
-    ) => {
-      console.log("addCardToList");
-      const lists = _context.Query.lists;
-      const listToUpdate = lists.find((elem: any) => elem.id === listId);
-      if (listToUpdate) {
-        card["id"] = "abcede";
-        const newCard = Object.assign({}, card); // to fix toString() [Object: null prototype] problem
-        listToUpdate.cards.push(newCard);
-        console.log(typeof newCard);
-        console.log(listToUpdate);
-      }
-    },
+const mutationResolvers: MutationResolvers<LoadingDataContext> = {
+  addCardToList: async (_parent, args, _context) => {
+    console.log("addCardToList");
+    const lists = _context.Query.lists;
+    if (!lists) throw new Error("empty lists in Query");
+
+    const listToUpdate = lists.find((elem: any) => elem.id === args.listId);
+    if (!listToUpdate)
+      throw new Error(`listId = ${args.listId} does not exist`);
+
+    const card = Object.assign({ id: uuidv4() }, args.card) as Card;
+    if (!listToUpdate.cards) listToUpdate.cards = [card];
+    else listToUpdate.cards.push(card);
+
+    return 10;
   },
 };
+
+// const typeResolvers = {
+// List: {
+//   id: async (parent, _args, _content, _info) => {
+//     return parent.id;
+//   },
+//   title: async (parent, _args, _content, _info) => {
+//     return parent.title;
+//   },
+//   maxNumCards: async (parent, _args, _content, _info) => {
+//     return parent.maxNumCards;
+//   },
+//   cards: async (parent, _args, _content, _info) => {
+//     return parent.cards;
+//   },
+// },
+// Card: {
+//   title: async (parent, _args, _content, _info) => {
+//     return parent.title;
+//   },
+//   description: async (parent, _args, _content, _info) => {
+//     return parent.description;
+//   },
+//   labels: async (parent, _args, _content, _info) => {
+//     return parent.labels;
+//   },
+// },
+// };
 
 //const resolvers: Resolvers<LoadingDataContext> = {
-const resolvers = Object.assign({}, queryResolvers, mutationResolvers);
+const resolvers = {
+  Query: queryResolvers,
+  Mutation: mutationResolvers,
+};
 
 const readJsonFileSync = (relativeFileName: string): Promise<any> => {
   const jsonDataFile = __dirname.concat(relativeFileName);

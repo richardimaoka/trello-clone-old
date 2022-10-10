@@ -17,8 +17,7 @@ type Card {
 }
 
 type Mutation {
-  insertCardToList(atIndex: Int, listId: ID, cardId: ID): Int
-  addCardToList(listId: ID, card: CardInput): Int
+  addCardToList(listId: ID!, card: CardInput!): Int
 }
 
 input CardInput {

@@ -10,6 +10,9 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>;
 };
+export type RequireFields<T, K extends keyof T> = Omit<T, K> & {
+  [P in K]-?: NonNullable<T[P]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -43,18 +46,11 @@ export type List = {
 export type Mutation = {
   __typename?: "Mutation";
   addCardToList: Maybe<Scalars["Int"]>;
-  insertCardToList: Maybe<Scalars["Int"]>;
 };
 
 export type MutationAddCardToListArgs = {
-  card: InputMaybe<CardInput>;
-  listId: InputMaybe<Scalars["ID"]>;
-};
-
-export type MutationInsertCardToListArgs = {
-  atIndex: InputMaybe<Scalars["Int"]>;
-  cardId: InputMaybe<Scalars["ID"]>;
-  listId: InputMaybe<Scalars["ID"]>;
+  card: CardInput;
+  listId: Scalars["ID"];
 };
 
 export type Query = {
@@ -235,13 +231,7 @@ export type MutationResolvers<
     Maybe<ResolversTypes["Int"]>,
     ParentType,
     ContextType,
-    Partial<MutationAddCardToListArgs>
-  >;
-  insertCardToList: Resolver<
-    Maybe<ResolversTypes["Int"]>,
-    ParentType,
-    ContextType,
-    Partial<MutationInsertCardToListArgs>
+    RequireFields<MutationAddCardToListArgs, "card" | "listId">
   >;
 };
 
