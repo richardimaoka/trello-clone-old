@@ -15,6 +15,7 @@ export interface ListComponentProps {
   fragment: ListComponentFragment;
   showInput: boolean;
   overlaidCardId: string | null;
+  draggedCardId: string | null;
 }
 
 gql`
@@ -27,6 +28,7 @@ export const ListComponent = ({
   fragment,
   showInput,
   overlaidCardId,
+  draggedCardId,
 }: ListComponentProps) => {
   const el = useRef<HTMLInputElement>(null);
   const [addCardToList, { data, loading, error }] = useAddCardToListMutation({
@@ -83,6 +85,7 @@ export const ListComponent = ({
           key={index}
           fragment={c}
           overlaidCardId={overlaidCardId}
+          draggedCardId={draggedCardId}
         />
       ))}
 

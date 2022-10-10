@@ -2,32 +2,38 @@
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { DragEventHandler } from "react";
-import { draggedCardId, overlaidCardId as makeOverlaidCardId } from "./cache";
+import {
+  draggedCardId as makeDraggedCardId,
+  overlaidCardId as makeOverlaidCardId,
+} from "./cache";
 import { CardComponentFragment } from "./generated/graphql";
 export interface CardComponentProps {
   fragment: CardComponentFragment;
   overlaidCardId: string | null;
+  draggedCardId: string | null;
 }
 
 export const CardComponent = ({
   fragment,
   overlaidCardId,
+  draggedCardId,
 }: CardComponentProps) => {
   const backgroundColor =
-    fragment.id === draggedCardId()
+    fragment.id === draggedCardId
       ? "#6d6060"
       : fragment.id === overlaidCardId
       ? "#80dbff"
       : "#ffffff";
 
   const setDraggedCardId = () => {
-    draggedCardId(fragment.id);
+    makeDraggedCardId(fragment.id);
   };
-  const unSetDraggedCardId = () => {
-    draggedCardId("");
+  const clearDragAndOverlay = () => {
+    makeDraggedCardId("");
+    makeOverlaidCardId("");
   };
   const setOverlaidCardId: DragEventHandler<HTMLDivElement> = (e) => {
-    if (fragment.id !== draggedCardId()) {
+    if (fragment.id !== draggedCardId) {
       makeOverlaidCardId(fragment.id);
     }
   };
@@ -40,7 +46,7 @@ export const CardComponent = ({
         background-color: ${backgroundColor};
       `}
       onDragStart={setDraggedCardId}
-      onDragEnd={unSetDraggedCardId}
+      onDragEnd={clearDragAndOverlay}
       onDragEnter={setOverlaidCardId}
     >
       <div>{fragment.title}</div>

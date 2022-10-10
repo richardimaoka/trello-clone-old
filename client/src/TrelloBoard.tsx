@@ -47,6 +47,7 @@ export const TrelloBoard = () => {
             key={index}
             fragment={l}
             overlaidCardId={data.overlaidCardId}
+            draggedCardId={data.draggedCardId}
             showInput={data.cardAdding?.listId === l.id}
           />
         ))}
