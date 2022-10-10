@@ -27,12 +27,34 @@ export type Card = {
   title: Maybe<Scalars["String"]>;
 };
 
+export type CardInput = {
+  description: InputMaybe<Scalars["String"]>;
+  title: InputMaybe<Scalars["String"]>;
+};
+
 export type List = {
   __typename?: "List";
   cards: Maybe<Array<Maybe<Card>>>;
   id: Scalars["ID"];
   maxNumCards: Maybe<Scalars["Int"]>;
   title: Maybe<Scalars["String"]>;
+};
+
+export type Mutation = {
+  __typename?: "Mutation";
+  addCardToList: Maybe<Scalars["Int"]>;
+  insertCardToList: Maybe<Scalars["Int"]>;
+};
+
+export type MutationAddCardToListArgs = {
+  card: InputMaybe<CardInput>;
+  listId: InputMaybe<Scalars["ID"]>;
+};
+
+export type MutationInsertCardToListArgs = {
+  atIndex: InputMaybe<Scalars["Int"]>;
+  cardId: InputMaybe<Scalars["ID"]>;
+  listId: InputMaybe<Scalars["ID"]>;
 };
 
 export type Query = {
@@ -149,9 +171,11 @@ export type DirectiveResolverFn<
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
   Card: ResolverTypeWrapper<Card>;
+  CardInput: CardInput;
   ID: ResolverTypeWrapper<Scalars["ID"]>;
   Int: ResolverTypeWrapper<Scalars["Int"]>;
   List: ResolverTypeWrapper<List>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars["String"]>;
 };
@@ -160,9 +184,11 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Boolean: Scalars["Boolean"];
   Card: Card;
+  CardInput: CardInput;
   ID: Scalars["ID"];
   Int: Scalars["Int"];
   List: List;
+  Mutation: {};
   Query: {};
   String: Scalars["String"];
 };
@@ -201,6 +227,24 @@ export type ListResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MutationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes["Mutation"] = ResolversParentTypes["Mutation"]
+> = {
+  addCardToList: Resolver<
+    Maybe<ResolversTypes["Int"]>,
+    ParentType,
+    ContextType,
+    Partial<MutationAddCardToListArgs>
+  >;
+  insertCardToList: Resolver<
+    Maybe<ResolversTypes["Int"]>,
+    ParentType,
+    ContextType,
+    Partial<MutationInsertCardToListArgs>
+  >;
+};
+
 export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
@@ -215,5 +259,6 @@ export type QueryResolvers<
 export type Resolvers<ContextType = any> = {
   Card: CardResolvers<ContextType>;
   List: ListResolvers<ContextType>;
+  Mutation: MutationResolvers<ContextType>;
   Query: QueryResolvers<ContextType>;
 };

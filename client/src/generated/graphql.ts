@@ -29,12 +29,34 @@ export type Card = {
   title: Maybe<Scalars["String"]>;
 };
 
+export type CardInput = {
+  description: InputMaybe<Scalars["String"]>;
+  title: InputMaybe<Scalars["String"]>;
+};
+
 export type List = {
   __typename?: "List";
   cards: Maybe<Array<Maybe<Card>>>;
   id: Scalars["ID"];
   maxNumCards: Maybe<Scalars["Int"]>;
   title: Maybe<Scalars["String"]>;
+};
+
+export type Mutation = {
+  __typename?: "Mutation";
+  addCardToList: Maybe<Scalars["Int"]>;
+  insertCardToList: Maybe<Scalars["Int"]>;
+};
+
+export type MutationAddCardToListArgs = {
+  card: InputMaybe<CardInput>;
+  listId: InputMaybe<Scalars["ID"]>;
+};
+
+export type MutationInsertCardToListArgs = {
+  atIndex: InputMaybe<Scalars["Int"]>;
+  cardId: InputMaybe<Scalars["ID"]>;
+  listId: InputMaybe<Scalars["ID"]>;
 };
 
 export type Query = {

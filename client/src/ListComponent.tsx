@@ -9,11 +9,16 @@ export interface ListComponentProps {
   fragment: ListComponentFragment;
 }
 
+// const MUTATION = gql``;
+
 export const ListComponent = ({ fragment }: ListComponentProps) => {
   const cards = fragment.cards
     ? excludeNullFromArray<Card>(fragment.cards)
     : [];
 
+  const addCard = () => {
+    console.log("adding a card");
+  };
   return (
     <div
       css={css`
@@ -26,6 +31,7 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
       {cards.map((c, index) => (
         <CardComponent key={index} fragment={c} />
       ))}
+      <button onClick={() => {}}>Add a card</button>
     </div>
   );
 };

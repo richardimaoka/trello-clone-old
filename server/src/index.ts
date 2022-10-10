@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from "apollo-server";
 import * as fs from "fs";
-import { Query, Resolvers } from "./generated/graphql";
+import { CardInput, Query, Resolvers } from "./generated/graphql";
 
 const typeDefs = gql`
   ${fs.readFileSync(__dirname.concat("/../schema.gql"), "utf8")}
@@ -15,6 +15,11 @@ const resolvers = {
   Query: {
     lists: async (_parent: any, _args: any, context: any, _info: any) => {
       return context.Query.lists;
+    },
+  },
+  Mutation: {
+    addCardToList: async (listId: string, card: CardInput) => {
+      console.log("addCardToList");
     },
   },
   // List: {
@@ -55,6 +60,7 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
   context: async ({ req }: any) => {
+    console.log("context loaded");
     try {
       const queryData: LoadingDataContext = await readJsonFile(
         "/../data/Query.json"

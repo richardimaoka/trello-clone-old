@@ -15,3 +15,13 @@ type Card {
   description: String
   labels: [String]
 }
+
+type Mutation {
+  insertCardToList(atIndex: Int, listId: ID, cardId: ID): Int
+  addCardToList(listId: ID, card: CardInput): Int
+}
+
+input CardInput {
+  title: String
+  description: String
+}
