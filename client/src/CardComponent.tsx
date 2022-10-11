@@ -41,11 +41,17 @@ export const CardComponent = ({
     e.preventDefault(); //this is necessary for onDrag to fire
   };
   const swapCards = (e: any) => {
-    console.log("swap cardds");
+    console.log(
+      "swap cardds",
+      fragment.id,
+      "with",
+      e.currentTarget.getAttribute("data-card-id")
+    );
   };
 
   return (
     <div
+      data-card-id={fragment.id}
       draggable={true}
       css={css`
         padding: 10px;
