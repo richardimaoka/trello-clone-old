@@ -2,7 +2,7 @@
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { ChangeEventHandler, useEffect, useRef } from "react";
-import { cardAdding, overlaidCardId } from "./cache";
+import { cardAdding } from "./cache";
 import { CardComponent } from "./CardComponent";
 import { excludeNullFromArray } from "./excludeNullFromArray";
 import {
@@ -84,6 +84,7 @@ export const ListComponent = ({
         <CardComponent
           key={index}
           fragment={c}
+          listId={fragment.id}
           overlaidCardId={overlaidCardId}
           draggedCardId={draggedCardId}
         />

@@ -6,18 +6,33 @@ import {
   draggedCardId as makeDraggedCardId,
   overlaidCardId as makeOverlaidCardId,
 } from "./cache";
-import { CardComponentFragment } from "./generated/graphql";
+import {
+  CardComponentFragment,
+  useSwapCardsWithinListMutation,
+} from "./generated/graphql";
 export interface CardComponentProps {
   fragment: CardComponentFragment;
+  listId: string;
   overlaidCardId: string | null;
   draggedCardId: string | null;
 }
 
+gql`
+  mutation swapCardsWithinList($listId: ID!, $card1Id: ID!, $card2Id: ID!) {
+    swapCardsWithinList(listId: $listId, card1Id: $card1Id, card2Id: $card2Id)
+  }
+`;
+
 export const CardComponent = ({
   fragment,
+  listId,
   overlaidCardId,
   draggedCardId,
 }: CardComponentProps) => {
+  const [swapCardWithinList] = useSwapCardsWithinListMutation({
+    refetchQueries: ["GetSearchResult"],
+  });
+
   const backgroundColor =
     fragment.id === draggedCardId
       ? "#6d6060"
@@ -41,12 +56,17 @@ export const CardComponent = ({
     e.preventDefault(); //this is necessary for onDrag to fire
   };
   const swapCards = (e: any) => {
-    console.log(
-      "swap cardds",
-      fragment.id,
-      "with",
-      e.currentTarget.getAttribute("data-card-id")
-    );
+    const card1Id = draggedCardId;
+    const card2Id = fragment.id;
+
+    if (!card1Id) {
+      console.log(`draggedCardId is ${draggedCardId}`);
+      return;
+    }
+
+    swapCardWithinList({
+      variables: { listId: listId, card1Id: card1Id, card2Id: card2Id },
+    });
   };
 
   return (
