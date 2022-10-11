@@ -18,6 +18,7 @@ type Card {
 
 type Mutation {
   addCardToList(listId: ID!, card: CardInput!): Int
+  swapCardsWithinList(listId: ID!, card1Id: ID!, card2Id: ID!): Int
 }
 
 input CardInput {

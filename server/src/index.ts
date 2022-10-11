@@ -2,7 +2,7 @@ import { ApolloServer, gql } from "apollo-server";
 import * as fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import { Card } from "./../../client/src/generated/graphql";
-import { MutationResolvers, Query } from "./generated/graphql";
+import { List, MutationResolvers, Query } from "./generated/graphql";
 
 const typeDefs = gql`
   ${fs.readFileSync(__dirname.concat("/../schema.gql"), "utf8")}
@@ -24,7 +24,9 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     const lists = _context.Query.lists;
     if (!lists) throw new Error("empty lists in Query");
 
-    const listToUpdate = lists.find((elem: any) => elem.id === args.listId);
+    const listToUpdate = lists.find(
+      (elem: List | null) => elem && elem.id === args.listId
+    );
     if (!listToUpdate)
       throw new Error(`listId = ${args.listId} does not exist`);
 
@@ -37,6 +39,41 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     );
 
     return 10;
+  },
+  swapCardsWithinList: async (_parent, args, _context) => {
+    // console.log("swapCardsWithinList");
+    const lists = _context.Query.lists;
+    if (!lists) throw new Error("empty lists in Query");
+
+    const listToUpdate = lists.find((elem: any) => elem.id === args.listId);
+    if (!listToUpdate)
+      throw new Error(`listId = ${args.listId} does not exist`);
+
+    const cardsToUpdate = listToUpdate.cards;
+    if (!cardsToUpdate) throw new Error(`listId = ${args.listId} has no card`);
+
+    const card1Index = cardsToUpdate.findIndex(
+      (elem: Card | null) => elem && elem.id === args.card1Id
+    );
+    if (card1Index === undefined || card1Index === -1)
+      throw new Error(
+        `card1Id = ${args.card1Id} does not exist in listId = ${args.listId}`
+      );
+
+    const card2Index = cardsToUpdate.findIndex(
+      (elem: Card | null) => elem && elem.id === args.card2Id
+    );
+    if (card2Index === undefined || card2Index === -1)
+      throw new Error(
+        `card2Id = ${args.card2Id} does not exist in listId = ${args.listId}`
+      );
+
+    const card1 = cardsToUpdate[card1Index];
+    const card2 = cardsToUpdate[card2Index];
+    cardsToUpdate[card1Index] = card2;
+    cardsToUpdate[card2Index] = card1;
+
+    return 1;
   },
 };
 
