@@ -4,16 +4,20 @@ import { css } from "@emotion/react";
 import { DragEventHandler } from "react";
 import {
   draggedCardId as makeDraggedCardId,
+  draggedListId as makeDraggedListId,
   overlaidCardId as makeOverlaidCardId,
 } from "./cache";
 import {
   CardComponentFragment,
+  useSwapCardsBetweenListsMutation,
   useSwapCardsWithinListMutation,
 } from "./generated/graphql";
+
 export interface CardComponentProps {
   fragment: CardComponentFragment;
   listId: string;
   overlaidCardId: string | null;
+  draggedListId: string | null;
   draggedCardId: string | null;
 }
 
@@ -23,13 +27,33 @@ gql`
   }
 `;
 
+gql`
+  mutation swapCardsBetweenLists(
+    $list1Id: ID!
+    $list2Id: ID!
+    $card1Id: ID!
+    $card2Id: ID!
+  ) {
+    swapCardsBetweenLists(
+      list1Id: $list1Id
+      list2Id: $list2Id
+      card1Id: $card1Id
+      card2Id: $card2Id
+    )
+  }
+`;
+
 export const CardComponent = ({
   fragment,
   listId,
   overlaidCardId,
+  draggedListId,
   draggedCardId,
 }: CardComponentProps) => {
   const [swapCardWithinList] = useSwapCardsWithinListMutation({
+    refetchQueries: ["GetSearchResult"],
+  });
+  const [swapCardsBetweenLists] = useSwapCardsBetweenListsMutation({
     refetchQueries: ["GetSearchResult"],
   });
 
@@ -40,11 +64,13 @@ export const CardComponent = ({
       ? "#80dbff"
       : "#ffffff";
 
-  const setDraggedCardId = () => {
+  const setDragged = () => {
     makeDraggedCardId(fragment.id);
+    makeDraggedListId(listId);
   };
   const clearDragAndOverlay = () => {
     makeDraggedCardId("");
+    makeDraggedListId("");
     makeOverlaidCardId("");
   };
   const setOverlaidCardId: DragEventHandler<HTMLDivElement> = (e) => {
@@ -56,17 +82,38 @@ export const CardComponent = ({
     e.preventDefault(); //this is necessary for onDrag to fire
   };
   const swapCards = (e: any) => {
+    const list1Id = draggedListId;
+    const list2Id = listId;
     const card1Id = draggedCardId;
     const card2Id = fragment.id;
 
-    if (!card1Id) {
-      console.log(`draggedCardId is ${draggedCardId}`);
-      return;
-    }
+    if (list1Id === list2Id) {
+      if (!card1Id) {
+        console.log("swap nothing as card1Id =", card1Id);
+        return;
+      }
 
-    swapCardWithinList({
-      variables: { listId: listId, card1Id: card1Id, card2Id: card2Id },
-    });
+      swapCardWithinList({
+        variables: { listId: listId, card1Id: card1Id, card2Id: card2Id },
+      });
+    } else {
+      if (!list1Id) {
+        console.log("swap nothing as list1Id =", list1Id);
+        return;
+      }
+      if (!card1Id) {
+        console.log("swap nothing as card1Id =", card1Id);
+        return;
+      }
+      swapCardsBetweenLists({
+        variables: {
+          list1Id: list1Id,
+          list2Id: list2Id,
+          card1Id: card1Id,
+          card2Id: card2Id,
+        },
+      });
+    }
   };
 
   return (
@@ -77,7 +124,7 @@ export const CardComponent = ({
         padding: 10px;
         background-color: ${backgroundColor};
       `}
-      onDragStart={setDraggedCardId}
+      onDragStart={setDragged}
       onDragEnd={clearDragAndOverlay}
       onDragEnter={setOverlaidCardId}
       onDragOver={handleDragOver}

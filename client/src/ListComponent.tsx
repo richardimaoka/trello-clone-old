@@ -15,6 +15,7 @@ export interface ListComponentProps {
   fragment: ListComponentFragment;
   showInput: boolean;
   overlaidCardId: string | null;
+  draggedListId: string | null;
   draggedCardId: string | null;
 }
 
@@ -28,10 +29,11 @@ export const ListComponent = ({
   fragment,
   showInput,
   overlaidCardId,
+  draggedListId,
   draggedCardId,
 }: ListComponentProps) => {
   const el = useRef<HTMLInputElement>(null);
-  const [addCardToList, { data, loading, error }] = useAddCardToListMutation({
+  const [addCardToList] = useAddCardToListMutation({
     refetchQueries: ["GetSearchResult"],
   });
 
@@ -86,6 +88,7 @@ export const ListComponent = ({
           fragment={c}
           listId={fragment.id}
           overlaidCardId={overlaidCardId}
+          draggedListId={draggedListId}
           draggedCardId={draggedCardId}
         />
       ))}

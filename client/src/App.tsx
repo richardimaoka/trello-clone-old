@@ -1,6 +1,11 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import "./App.css";
-import { cardAdding, draggedCardId, overlaidCardId } from "./cache";
+import {
+  cardAdding,
+  draggedCardId,
+  draggedListId,
+  overlaidCardId,
+} from "./cache";
 import { TrelloBoard } from "./TrelloBoard";
 
 const client = new ApolloClient({
@@ -12,6 +17,11 @@ const client = new ApolloClient({
           draggedCardId: {
             read(_currentCacheValue, _options) {
               return draggedCardId();
+            },
+          },
+          draggedListId: {
+            read(_currentCacheValue, _options) {
+              return draggedListId();
             },
           },
           cardAdding: {

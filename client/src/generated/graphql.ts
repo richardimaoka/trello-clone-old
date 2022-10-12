@@ -78,6 +78,7 @@ export type Query = {
   cardAdding: Maybe<CardAdding>;
   cartItems: Maybe<Array<Maybe<Scalars["Int"]>>>;
   draggedCardId: Maybe<Scalars["ID"]>;
+  draggedListId: Maybe<Scalars["ID"]>;
   lists: Maybe<Array<Maybe<List>>>;
   overlaidCardId: Maybe<Scalars["ID"]>;
 };
@@ -91,6 +92,18 @@ export type SwapCardsWithinListMutationVariables = Exact<{
 export type SwapCardsWithinListMutation = {
   __typename?: "Mutation";
   swapCardsWithinList: number | null;
+};
+
+export type SwapCardsBetweenListsMutationVariables = Exact<{
+  list1Id: Scalars["ID"];
+  list2Id: Scalars["ID"];
+  card1Id: Scalars["ID"];
+  card2Id: Scalars["ID"];
+}>;
+
+export type SwapCardsBetweenListsMutation = {
+  __typename?: "Mutation";
+  swapCardsBetweenLists: number | null;
 };
 
 export type CardComponentFragment = {
@@ -130,6 +143,7 @@ export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 export type GetSearchResultQuery = {
   __typename?: "Query";
   draggedCardId: string | null;
+  draggedListId: string | null;
   overlaidCardId: string | null;
   cardAdding: {
     __typename?: "CardAdding";
@@ -220,6 +234,67 @@ export type SwapCardsWithinListMutationOptions = Apollo.BaseMutationOptions<
   SwapCardsWithinListMutation,
   SwapCardsWithinListMutationVariables
 >;
+export const SwapCardsBetweenListsDocument = gql`
+  mutation swapCardsBetweenLists(
+    $list1Id: ID!
+    $list2Id: ID!
+    $card1Id: ID!
+    $card2Id: ID!
+  ) {
+    swapCardsBetweenLists(
+      list1Id: $list1Id
+      list2Id: $list2Id
+      card1Id: $card1Id
+      card2Id: $card2Id
+    )
+  }
+`;
+export type SwapCardsBetweenListsMutationFn = Apollo.MutationFunction<
+  SwapCardsBetweenListsMutation,
+  SwapCardsBetweenListsMutationVariables
+>;
+
+/**
+ * __useSwapCardsBetweenListsMutation__
+ *
+ * To run a mutation, you first call `useSwapCardsBetweenListsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSwapCardsBetweenListsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [swapCardsBetweenListsMutation, { data, loading, error }] = useSwapCardsBetweenListsMutation({
+ *   variables: {
+ *      list1Id: // value for 'list1Id'
+ *      list2Id: // value for 'list2Id'
+ *      card1Id: // value for 'card1Id'
+ *      card2Id: // value for 'card2Id'
+ *   },
+ * });
+ */
+export function useSwapCardsBetweenListsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SwapCardsBetweenListsMutation,
+    SwapCardsBetweenListsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SwapCardsBetweenListsMutation,
+    SwapCardsBetweenListsMutationVariables
+  >(SwapCardsBetweenListsDocument, options);
+}
+export type SwapCardsBetweenListsMutationHookResult = ReturnType<
+  typeof useSwapCardsBetweenListsMutation
+>;
+export type SwapCardsBetweenListsMutationResult =
+  Apollo.MutationResult<SwapCardsBetweenListsMutation>;
+export type SwapCardsBetweenListsMutationOptions = Apollo.BaseMutationOptions<
+  SwapCardsBetweenListsMutation,
+  SwapCardsBetweenListsMutationVariables
+>;
 export const AddCardToListDocument = gql`
   mutation addCardToList($listId: ID!, $title: String!) {
     addCardToList(listId: $listId, card: { title: $title })
@@ -272,6 +347,7 @@ export type AddCardToListMutationOptions = Apollo.BaseMutationOptions<
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
     draggedCardId @client
+    draggedListId @client
     overlaidCardId @client
     cardAdding @client {
       listId
