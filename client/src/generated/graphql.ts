@@ -51,12 +51,20 @@ export type List = {
 export type Mutation = {
   __typename?: "Mutation";
   addCardToList: Maybe<Scalars["Int"]>;
+  swapCardsBetweenLists: Maybe<Scalars["Int"]>;
   swapCardsWithinList: Maybe<Scalars["Int"]>;
 };
 
 export type MutationAddCardToListArgs = {
   card: CardInput;
   listId: Scalars["ID"];
+};
+
+export type MutationSwapCardsBetweenListsArgs = {
+  card1Id: Scalars["ID"];
+  card2Id: Scalars["ID"];
+  list1Id: Scalars["ID"];
+  list2Id: Scalars["ID"];
 };
 
 export type MutationSwapCardsWithinListArgs = {

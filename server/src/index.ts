@@ -40,6 +40,7 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
 
     return 10;
   },
+
   swapCardsWithinList: async (_parent, args, _context) => {
     // console.log("swapCardsWithinList");
     const lists = _context.Query.lists;
@@ -55,7 +56,7 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     const card1Index = cardsToUpdate.findIndex(
       (elem: Card | null) => elem && elem.id === args.card1Id
     );
-    if (card1Index === undefined || card1Index === -1)
+    if (card1Index === -1)
       throw new Error(
         `card1Id = ${args.card1Id} does not exist in listId = ${args.listId}`
       );
@@ -63,7 +64,7 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     const card2Index = cardsToUpdate.findIndex(
       (elem: Card | null) => elem && elem.id === args.card2Id
     );
-    if (card2Index === undefined || card2Index === -1)
+    if (card2Index === -1)
       throw new Error(
         `card2Id = ${args.card2Id} does not exist in listId = ${args.listId}`
       );
@@ -72,6 +73,47 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     const card2 = cardsToUpdate[card2Index];
     cardsToUpdate[card1Index] = card2;
     cardsToUpdate[card2Index] = card1;
+
+    return 1;
+  },
+
+  swapCardsBetweenLists: async (_parent, args, _context) => {
+    // console.log("swapCardsBetweenLists");
+    const lists = _context.Query.lists;
+    if (!lists) throw new Error("empty lists in Query");
+
+    const list1 = lists.find((elem: any) => elem.id === args.list1Id);
+    if (!list1) throw new Error(`listId = ${args.list1Id} does not exist`);
+
+    const list2 = lists.find((elem: any) => elem.id === args.list2Id);
+    if (!list2) throw new Error(`list2Id = ${args.list2Id} does not exist`);
+
+    const cards1 = list1.cards;
+    if (!cards1) throw new Error(`list1Id = ${args.list1Id} has no card`);
+
+    const cards2 = list2.cards;
+    if (!cards2) throw new Error(`list2Id = ${args.list2Id} has no card`);
+
+    const card1Index = cards1.findIndex(
+      (elem: Card | null) => elem && elem.id === args.card1Id
+    );
+    if (card1Index === -1)
+      throw new Error(
+        `card1Id = ${args.card1Id} does not exist in list1Id = ${args.list1Id}`
+      );
+
+    const card2Index = cards2.findIndex(
+      (elem: Card | null) => elem && elem.id === args.card2Id
+    );
+    if (card2Index === undefined || card2Index === -1)
+      throw new Error(
+        `card2Id = ${args.card2Id} does not exist in list2Id = ${args.list2Id}`
+      );
+
+    const card1 = cards1[card1Index];
+    const card2 = cards2[card2Index];
+    cards1[card1Index] = card2;
+    cards2[card2Index] = card1;
 
     return 1;
   },
