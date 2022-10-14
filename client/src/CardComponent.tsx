@@ -6,6 +6,7 @@ import {
   draggedCardId as makeDraggedCardId,
   draggedListId as makeDraggedListId,
   overlaidCardId as makeOverlaidCardId,
+  editScreenCardId as makeEditScreenCardId,
 } from "./cache";
 import {
   CardComponentFragment,
@@ -116,6 +117,7 @@ export const CardComponent = ({
     }
   };
   const launchEditScreen = () => {
+    makeEditScreenCardId(fragment.id);
     alert("edit screen");
   };
   return (

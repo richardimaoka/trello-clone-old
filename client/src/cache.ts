@@ -6,3 +6,4 @@ export const draggedCardId = makeVar<string>("");
 export const draggedListId = makeVar<string>("");
 export const overlaidCardId = makeVar<string>("");
 export const cardAdding = makeVar<CardAdding | null>(null);
+export const editScreenCardId = makeVar<string>("");

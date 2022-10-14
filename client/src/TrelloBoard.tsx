@@ -14,6 +14,7 @@ gql`
     draggedCardId @client
     draggedListId @client
     overlaidCardId @client
+    editScreenCardId @client
     cardAdding @client {
       listId
       inputText
@@ -37,6 +38,7 @@ export const TrelloBoard = () => {
 
   return (
     <>
+      <div>{data.editScreenCardId}</div>
       <div
         css={css`
           display: flex;
