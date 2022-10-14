@@ -115,7 +115,9 @@ export const CardComponent = ({
       });
     }
   };
-
+  const launchEditScreen = () => {
+    alert("edit screen");
+  };
   return (
     <div
       data-card-id={fragment.id}
@@ -129,6 +131,7 @@ export const CardComponent = ({
       onDragEnter={setOverlaidCardId}
       onDragOver={handleDragOver}
       onDrop={swapCards}
+      onClick={launchEditScreen}
     >
       <div>{fragment.title}</div>
     </div>
