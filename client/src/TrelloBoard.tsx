@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
+import { CardEditor } from "./CardEditor";
 import { excludeNullFromArray } from "./excludeNullFromArray";
 import {
   ListComponentFragment,
@@ -38,7 +39,7 @@ export const TrelloBoard = () => {
 
   return (
     <>
-      <div>{data.editScreenCardId}</div>
+      <CardEditor />
       <div
         css={css`
           display: flex;
