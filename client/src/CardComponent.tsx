@@ -118,7 +118,6 @@ export const CardComponent = ({
   };
   const launchEditScreen = () => {
     makeEditScreenCardId(fragment.id);
-    alert("edit screen");
   };
   return (
     <div
