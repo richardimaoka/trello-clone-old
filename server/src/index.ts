@@ -2,7 +2,13 @@ import { ApolloServer, gql } from "apollo-server";
 import * as fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import { Card } from "./../../client/src/generated/graphql";
-import { List, MutationResolvers, Query } from "./generated/graphql";
+import { excludeNullFromArray } from "./excludeNullFromArray";
+import {
+  List,
+  MutationResolvers,
+  Query,
+  QueryResolvers,
+} from "./generated/graphql";
 
 const typeDefs = gql`
   ${fs.readFileSync(__dirname.concat("/../schema.gql"), "utf8")}
@@ -12,9 +18,22 @@ interface LoadingDataContext {
   Query: Query;
 }
 
-const queryResolvers = {
-  lists: async (_parent: any, _args: any, context: any, _info: any) => {
+const queryResolvers: QueryResolvers<LoadingDataContext> = {
+  lists: async (_parent, _args, context, _info) => {
     return context.Query.lists;
+  },
+  card: async (_parent, args, context, _info) => {
+    if (!context.Query.lists) throw new Error("there is no list at all");
+
+    const cards = context.Query.lists
+      .map((list) =>
+        list?.cards ? excludeNullFromArray<Card>(list.cards) : []
+      )
+      .flat();
+
+    const card = cards.find((c) => c.id === args.id);
+    if (!card) throw new Error(`no such card with id = ${args.id}`);
+    return card;
   },
 };
 

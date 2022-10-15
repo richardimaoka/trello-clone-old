@@ -70,7 +70,12 @@ export type MutationSwapCardsWithinListArgs = {
 
 export type Query = {
   __typename?: "Query";
+  card: Maybe<Card>;
   lists: Maybe<Array<Maybe<List>>>;
+};
+
+export type QueryCardArgs = {
+  id: Scalars["ID"];
 };
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -272,6 +277,12 @@ export type QueryResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
 > = {
+  card: Resolver<
+    Maybe<ResolversTypes["Card"]>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryCardArgs, "id">
+  >;
   lists: Resolver<
     Maybe<Array<Maybe<ResolversTypes["List"]>>>,
     ParentType,

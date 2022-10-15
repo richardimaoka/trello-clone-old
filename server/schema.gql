@@ -1,5 +1,6 @@
 type Query {
   lists: [List]
+  card(id: ID!): Card
 }
 
 type List {

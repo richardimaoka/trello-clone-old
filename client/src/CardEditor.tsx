@@ -1,9 +1,34 @@
 /** @jsxImportSource @emotion/react */
 
+import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { editScreenCardId } from "./cache";
+import { CardEditorFragment, useGetCardEditorQuery } from "./generated/graphql";
 
-export const CardEditor = () => {
+gql`
+  query getCardEditor($id: ID!) {
+    card(id: $id) {
+      ...CardEditor
+    }
+  }
+`;
+
+interface CardEdtiorProps {
+  cardId: string;
+}
+
+export const CardEditor = ({ cardId }: CardEdtiorProps) => {
+  const { loading, error, data } = useGetCardEditorQuery({
+    variables: { id: cardId },
+  });
+
+  if (loading) return <div>loading...</div>;
+  if (error) return <div>error happened... {error.message}</div>;
+  if (!data) return <div>missing data...</div>;
+
+  console.log("CardEditor ========");
+  console.log(data);
+
   const unsetCadEditor = () => {
     editScreenCardId("");
   };
@@ -38,7 +63,7 @@ export const CardEditor = () => {
             height: 60px;
           `}
         >
-          abc
+          {data.card?.description}
         </div>
         <div
           css={css`
@@ -219,3 +244,10 @@ export const CardEditor = () => {
     </div>
   );
 };
+
+CardEditor.fragment = gql`
+  fragment CardEditor on Card {
+    id
+    description
+  }
+`;

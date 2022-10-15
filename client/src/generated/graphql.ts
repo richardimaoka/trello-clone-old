@@ -75,6 +75,7 @@ export type MutationSwapCardsWithinListArgs = {
 
 export type Query = {
   __typename?: "Query";
+  card: Maybe<Card>;
   cardAdding: Maybe<CardAdding>;
   cartItems: Maybe<Array<Maybe<Scalars["Int"]>>>;
   draggedCardId: Maybe<Scalars["ID"]>;
@@ -82,6 +83,10 @@ export type Query = {
   editScreenCardId: Maybe<Scalars["ID"]>;
   lists: Maybe<Array<Maybe<List>>>;
   overlaidCardId: Maybe<Scalars["ID"]>;
+};
+
+export type QueryCardArgs = {
+  id: Scalars["ID"];
 };
 
 export type SwapCardsWithinListMutationVariables = Exact<{
@@ -113,6 +118,21 @@ export type CardComponentFragment = {
   title: string | null;
   description: string | null;
   labels: Array<string | null> | null;
+};
+
+export type GetCardEditorQueryVariables = Exact<{
+  id: Scalars["ID"];
+}>;
+
+export type GetCardEditorQuery = {
+  __typename?: "Query";
+  card: { __typename?: "Card"; id: string; description: string | null } | null;
+};
+
+export type CardEditorFragment = {
+  __typename?: "Card";
+  id: string;
+  description: string | null;
 };
 
 export type AddCardToListMutationVariables = Exact<{
@@ -167,6 +187,12 @@ export type GetSearchResultQuery = {
   } | null> | null;
 };
 
+export const CardEditorFragmentDoc = gql`
+  fragment CardEditor on Card {
+    id
+    description
+  }
+`;
 export const CardComponentFragmentDoc = gql`
   fragment CardComponent on Card {
     id
@@ -296,6 +322,65 @@ export type SwapCardsBetweenListsMutationResult =
 export type SwapCardsBetweenListsMutationOptions = Apollo.BaseMutationOptions<
   SwapCardsBetweenListsMutation,
   SwapCardsBetweenListsMutationVariables
+>;
+export const GetCardEditorDocument = gql`
+  query getCardEditor($id: ID!) {
+    card(id: $id) {
+      ...CardEditor
+    }
+  }
+  ${CardEditorFragmentDoc}
+`;
+
+/**
+ * __useGetCardEditorQuery__
+ *
+ * To run a query within a React component, call `useGetCardEditorQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCardEditorQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCardEditorQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCardEditorQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetCardEditorQuery,
+    GetCardEditorQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetCardEditorQuery, GetCardEditorQueryVariables>(
+    GetCardEditorDocument,
+    options
+  );
+}
+export function useGetCardEditorLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetCardEditorQuery,
+    GetCardEditorQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetCardEditorQuery, GetCardEditorQueryVariables>(
+    GetCardEditorDocument,
+    options
+  );
+}
+export type GetCardEditorQueryHookResult = ReturnType<
+  typeof useGetCardEditorQuery
+>;
+export type GetCardEditorLazyQueryHookResult = ReturnType<
+  typeof useGetCardEditorLazyQuery
+>;
+export type GetCardEditorQueryResult = Apollo.QueryResult<
+  GetCardEditorQuery,
+  GetCardEditorQueryVariables
 >;
 export const AddCardToListDocument = gql`
   mutation addCardToList($listId: ID!, $title: String!) {

@@ -39,7 +39,11 @@ export const TrelloBoard = () => {
 
   return (
     <>
-      {data.editScreenCardId !== "" ? <CardEditor /> : <></>}
+      {data.editScreenCardId !== null && data.editScreenCardId !== "" ? (
+        <CardEditor cardId={data.editScreenCardId} />
+      ) : (
+        <></>
+      )}
       <div
         css={css`
           display: flex;
