@@ -2,7 +2,7 @@ import { ApolloServer, gql } from "apollo-server";
 import * as fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import { Card } from "./../../client/src/generated/graphql";
-import { excludeNullFromArray } from "./excludeNullFromArray";
+import { excludeNullFromArray, nonNullArray } from "./excludeNullFromArray";
 import {
   List,
   MutationResolvers,
@@ -26,9 +26,7 @@ const queryResolvers: QueryResolvers<LoadingDataContext> = {
     if (!context.Query.lists) throw new Error("there is no list at all");
 
     const cards = context.Query.lists
-      .map((list) =>
-        list?.cards ? excludeNullFromArray<Card>(list.cards) : []
-      )
+      .map((list) => (list?.cards ? nonNullArray(list.cards) : []))
       .flat();
 
     const card = cards.find((c) => c.id === args.id);
@@ -73,7 +71,7 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     if (!cardsToUpdate) throw new Error(`listId = ${args.listId} has no card`);
 
     const card1Index = cardsToUpdate.findIndex(
-      (elem: Card | null) => elem && elem.id === args.card1Id
+      (elem) => elem?.id === args.card1Id
     );
     if (card1Index === -1)
       throw new Error(
@@ -81,7 +79,7 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
       );
 
     const card2Index = cardsToUpdate.findIndex(
-      (elem: Card | null) => elem && elem.id === args.card2Id
+      (elem) => elem?.id === args.card2Id
     );
     if (card2Index === -1)
       throw new Error(
@@ -113,17 +111,13 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     const cards2 = list2.cards;
     if (!cards2) throw new Error(`list2Id = ${args.list2Id} has no card`);
 
-    const card1Index = cards1.findIndex(
-      (elem: Card | null) => elem && elem.id === args.card1Id
-    );
+    const card1Index = cards1.findIndex((elem) => elem?.id === args.card1Id);
     if (card1Index === -1)
       throw new Error(
         `card1Id = ${args.card1Id} does not exist in list1Id = ${args.list1Id}`
       );
 
-    const card2Index = cards2.findIndex(
-      (elem: Card | null) => elem && elem.id === args.card2Id
-    );
+    const card2Index = cards2.findIndex((elem) => elem?.id === args.card2Id);
     if (card2Index === undefined || card2Index === -1)
       throw new Error(
         `card2Id = ${args.card2Id} does not exist in list2Id = ${args.list2Id}`
