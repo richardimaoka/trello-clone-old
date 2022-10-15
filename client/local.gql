@@ -5,9 +5,34 @@ type Query {
   editScreenCardId: ID
   cartItems: [Int]
   cardAdding: CardAdding
+  controlVariable: ControlType
 }
 
 type CardAdding {
   listId: ID
   inputText: String
 }
+
+type CardAddInitiated {
+  listId: ID!
+  inputText: String!
+}
+
+type CardDragged {
+  listId: ID!
+  cardId: ID!
+}
+
+type ListDragged {
+  listId: ID!
+}
+
+type CardDetailOpened {
+  cardId: ID!
+}
+
+union ControlType =
+    CardAddInitiated
+  | CardDragged
+  | ListDragged
+  | CardDetailOpened

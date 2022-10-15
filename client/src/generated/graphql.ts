@@ -29,10 +29,27 @@ export type Card = {
   title: Maybe<Scalars["String"]>;
 };
 
+export type CardAddInitiated = {
+  __typename?: "CardAddInitiated";
+  inputText: Scalars["String"];
+  listId: Scalars["ID"];
+};
+
 export type CardAdding = {
   __typename?: "CardAdding";
   inputText: Maybe<Scalars["String"]>;
   listId: Maybe<Scalars["ID"]>;
+};
+
+export type CardDetailOpened = {
+  __typename?: "CardDetailOpened";
+  cardId: Scalars["ID"];
+};
+
+export type CardDragged = {
+  __typename?: "CardDragged";
+  cardId: Scalars["ID"];
+  listId: Scalars["ID"];
 };
 
 export type CardInput = {
@@ -40,12 +57,23 @@ export type CardInput = {
   title: InputMaybe<Scalars["String"]>;
 };
 
+export type ControlType =
+  | CardAddInitiated
+  | CardDetailOpened
+  | CardDragged
+  | ListDragged;
+
 export type List = {
   __typename?: "List";
   cards: Maybe<Array<Maybe<Card>>>;
   id: Scalars["ID"];
   maxNumCards: Maybe<Scalars["Int"]>;
   title: Maybe<Scalars["String"]>;
+};
+
+export type ListDragged = {
+  __typename?: "ListDragged";
+  listId: Scalars["ID"];
 };
 
 export type Mutation = {
@@ -78,6 +106,7 @@ export type Query = {
   card: Maybe<Card>;
   cardAdding: Maybe<CardAdding>;
   cartItems: Maybe<Array<Maybe<Scalars["Int"]>>>;
+  controlVariable: Maybe<ControlType>;
   draggedCardId: Maybe<Scalars["ID"]>;
   draggedListId: Maybe<Scalars["ID"]>;
   editScreenCardId: Maybe<Scalars["ID"]>;
