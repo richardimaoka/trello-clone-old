@@ -22,7 +22,7 @@ export type Scalars = {
 };
 
 export type Card = {
-  __typename?: "Card";
+  __typename: "Card";
   description: Maybe<Scalars["String"]>;
   id: Scalars["ID"];
   labels: Maybe<Array<Maybe<Scalars["String"]>>>;
@@ -30,24 +30,24 @@ export type Card = {
 };
 
 export type CardAddInitiated = {
-  __typename?: "CardAddInitiated";
+  __typename: "CardAddInitiated";
   inputText: Scalars["String"];
   listId: Scalars["ID"];
 };
 
 export type CardAdding = {
-  __typename?: "CardAdding";
+  __typename: "CardAdding";
   inputText: Maybe<Scalars["String"]>;
   listId: Maybe<Scalars["ID"]>;
 };
 
 export type CardDetailOpened = {
-  __typename?: "CardDetailOpened";
+  __typename: "CardDetailOpened";
   cardId: Scalars["ID"];
 };
 
 export type CardDragged = {
-  __typename?: "CardDragged";
+  __typename: "CardDragged";
   cardId: Scalars["ID"];
   listId: Scalars["ID"];
 };
@@ -64,7 +64,7 @@ export type ControlType =
   | ListDragged;
 
 export type List = {
-  __typename?: "List";
+  __typename: "List";
   cards: Maybe<Array<Maybe<Card>>>;
   id: Scalars["ID"];
   maxNumCards: Maybe<Scalars["Int"]>;
@@ -72,12 +72,12 @@ export type List = {
 };
 
 export type ListDragged = {
-  __typename?: "ListDragged";
+  __typename: "ListDragged";
   listId: Scalars["ID"];
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
+  __typename: "Mutation";
   addCardToList: Maybe<Scalars["Int"]>;
   swapCardsBetweenLists: Maybe<Scalars["Int"]>;
   swapCardsWithinList: Maybe<Scalars["Int"]>;
@@ -102,7 +102,7 @@ export type MutationSwapCardsWithinListArgs = {
 };
 
 export type Query = {
-  __typename?: "Query";
+  __typename: "Query";
   card: Maybe<Card>;
   cardAdding: Maybe<CardAdding>;
   cartItems: Maybe<Array<Maybe<Scalars["Int"]>>>;
@@ -125,7 +125,7 @@ export type SwapCardsWithinListMutationVariables = Exact<{
 }>;
 
 export type SwapCardsWithinListMutation = {
-  __typename?: "Mutation";
+  __typename: "Mutation";
   swapCardsWithinList: number | null;
 };
 
@@ -137,12 +137,12 @@ export type SwapCardsBetweenListsMutationVariables = Exact<{
 }>;
 
 export type SwapCardsBetweenListsMutation = {
-  __typename?: "Mutation";
+  __typename: "Mutation";
   swapCardsBetweenLists: number | null;
 };
 
 export type CardComponentFragment = {
-  __typename?: "Card";
+  __typename: "Card";
   id: string;
   title: string | null;
   description: string | null;
@@ -154,12 +154,12 @@ export type GetCardEditorQueryVariables = Exact<{
 }>;
 
 export type GetCardEditorQuery = {
-  __typename?: "Query";
-  card: { __typename?: "Card"; id: string; description: string | null } | null;
+  __typename: "Query";
+  card: { __typename: "Card"; id: string; description: string | null } | null;
 };
 
 export type CardEditorFragment = {
-  __typename?: "Card";
+  __typename: "Card";
   id: string;
   description: string | null;
 };
@@ -170,17 +170,17 @@ export type AddCardToListMutationVariables = Exact<{
 }>;
 
 export type AddCardToListMutation = {
-  __typename?: "Mutation";
+  __typename: "Mutation";
   addCardToList: number | null;
 };
 
 export type ListComponentFragment = {
-  __typename?: "List";
+  __typename: "List";
   id: string;
   title: string | null;
   maxNumCards: number | null;
   cards: Array<{
-    __typename?: "Card";
+    __typename: "Card";
     id: string;
     title: string | null;
     description: string | null;
@@ -191,23 +191,23 @@ export type ListComponentFragment = {
 export type GetSearchResultQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetSearchResultQuery = {
-  __typename?: "Query";
+  __typename: "Query";
   draggedCardId: string | null;
   draggedListId: string | null;
   overlaidCardId: string | null;
   editScreenCardId: string | null;
   cardAdding: {
-    __typename?: "CardAdding";
+    __typename: "CardAdding";
     listId: string | null;
     inputText: string | null;
   } | null;
   lists: Array<{
-    __typename?: "List";
+    __typename: "List";
     id: string;
     title: string | null;
     maxNumCards: number | null;
     cards: Array<{
-      __typename?: "Card";
+      __typename: "Card";
       id: string;
       title: string | null;
       description: string | null;

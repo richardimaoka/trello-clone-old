@@ -11,6 +11,7 @@ generates:
       - "typescript-react-apollo"
     config:
       avoidOptionals: true
+      nonOptionalTypename: true
 hooks:
   afterOneFileWrite:
     - npx prettier --write

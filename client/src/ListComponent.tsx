@@ -2,7 +2,7 @@
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { ChangeEventHandler, useEffect, useRef } from "react";
-import { cardAdding } from "./cache";
+import { cardAdding, controlVariable } from "./cache";
 import { CardComponent } from "./CardComponent";
 import { excludeNullFromArray } from "./excludeNullFromArray";
 import {
@@ -56,12 +56,13 @@ export const ListComponent = ({
   };
 
   const addingCardOnClick = () => {
-    console.log("addingCardOnClick");
     cardAdding({ listId: fragment.id, inputText: "" });
+    controlVariable({ listId: fragment.id, inputText: "" });
   };
 
   const clearCardAdding = () => {
     cardAdding(null);
+    controlVariable(null);
   };
 
   const asTyped: ChangeEventHandler<HTMLInputElement> = (event) => {
