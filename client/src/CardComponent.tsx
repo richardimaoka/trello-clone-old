@@ -7,6 +7,7 @@ import {
   draggedListId as makeDraggedListId,
   overlaidCardId as makeOverlaidCardId,
   editScreenCardId as makeEditScreenCardId,
+  controlVariable,
 } from "./cache";
 import {
   CardComponentFragment,
@@ -73,10 +74,17 @@ export const CardComponent = ({
     makeDraggedCardId("");
     makeDraggedListId("");
     makeOverlaidCardId("");
+    controlVariable(null);
   };
   const setOverlaidCardId: DragEventHandler<HTMLDivElement> = (e) => {
     if (fragment.id !== draggedCardId) {
       makeOverlaidCardId(fragment.id);
+      controlVariable({
+        __typename: "CardDragged",
+        cardId: "",
+        listId: "",
+        overlaidCardId: fragment.id,
+      });
     }
   };
   const handleDragOver = (e: any) => {

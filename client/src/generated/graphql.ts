@@ -50,6 +50,7 @@ export type CardDragged = {
   __typename: "CardDragged";
   cardId: Scalars["ID"];
   listId: Scalars["ID"];
+  overlaidCardId: Maybe<Scalars["ID"]>;
 };
 
 export type CardInput = {

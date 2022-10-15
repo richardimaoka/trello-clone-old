@@ -2,8 +2,8 @@
 
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
-import { editScreenCardId } from "./cache";
-import { CardEditorFragment, useGetCardEditorQuery } from "./generated/graphql";
+import { controlVariable, editScreenCardId } from "./cache";
+import { useGetCardEditorQuery } from "./generated/graphql";
 
 gql`
   query getCardEditor($id: ID!) {
@@ -26,11 +26,9 @@ export const CardEditor = ({ cardId }: CardEdtiorProps) => {
   if (error) return <div>error happened... {error.message}</div>;
   if (!data) return <div>missing data...</div>;
 
-  console.log("CardEditor ========");
-  console.log(data);
-
   const unsetCadEditor = () => {
     editScreenCardId("");
+    controlVariable(null);
   };
 
   return (

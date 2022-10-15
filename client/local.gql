@@ -21,6 +21,7 @@ type CardAddInitiated {
 type CardDragged {
   listId: ID!
   cardId: ID!
+  overlaidCardId: ID
 }
 
 type ListDragged {
