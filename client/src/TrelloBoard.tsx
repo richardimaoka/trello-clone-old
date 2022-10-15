@@ -2,11 +2,8 @@
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { CardEditor } from "./CardEditor";
-import { excludeNullFromArray } from "./excludeNullFromArray";
-import {
-  ListComponentFragment,
-  useGetSearchResultQuery,
-} from "./generated/graphql";
+import { nonNullArray } from "./nonNullArray";
+import { useGetSearchResultQuery } from "./generated/graphql";
 import { ListComponent } from "./ListComponent";
 
 //const QUERY = gql`...` will cause `'QUERY' is declared but its value is never read`
@@ -33,9 +30,7 @@ export const TrelloBoard = () => {
   if (error) return <div>error happened {error.message}</div>;
   if (!data) return <div>error happened empty data</div>;
 
-  const lists = data.lists
-    ? excludeNullFromArray<ListComponentFragment>(data.lists)
-    : [];
+  const lists = data.lists ? nonNullArray(data.lists) : [];
 
   return (
     <>

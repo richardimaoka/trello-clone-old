@@ -2,7 +2,7 @@ import { ApolloServer, gql } from "apollo-server";
 import * as fs from "fs";
 import { v4 as uuidv4 } from "uuid";
 import { Card } from "./../../client/src/generated/graphql";
-import { excludeNullFromArray, nonNullArray } from "./excludeNullFromArray";
+import { nonNullArray } from "./excludeNullFromArray";
 import {
   List,
   MutationResolvers,

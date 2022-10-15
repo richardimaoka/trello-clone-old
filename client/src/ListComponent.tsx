@@ -4,7 +4,7 @@ import { css } from "@emotion/react";
 import { ChangeEventHandler, useEffect, useRef } from "react";
 import { cardAdding, controlVariable } from "./cache";
 import { CardComponent } from "./CardComponent";
-import { excludeNullFromArray } from "./excludeNullFromArray";
+import { nonNullArray } from "./nonNullArray";
 import {
   CardComponentFragment,
   ListComponentFragment,
@@ -43,9 +43,7 @@ export const ListComponent = ({
     }
   });
 
-  const cards = fragment.cards
-    ? excludeNullFromArray<CardComponentFragment>(fragment.cards)
-    : [];
+  const cards = fragment.cards ? nonNullArray(fragment.cards) : [];
 
   const reallyAddCard = () => {
     const ca = cardAdding();
