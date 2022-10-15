@@ -56,8 +56,16 @@ export const ListComponent = ({
   };
 
   const addingCardOnClick = () => {
-    cardAdding({ listId: fragment.id, inputText: "" });
-    controlVariable({ listId: fragment.id, inputText: "" });
+    cardAdding({
+      __typename: "CardAdding",
+      listId: fragment.id,
+      inputText: "",
+    });
+    controlVariable({
+      __typename: "CardAddInitiated",
+      listId: fragment.id,
+      inputText: "",
+    });
   };
 
   const clearCardAdding = () => {
@@ -68,7 +76,11 @@ export const ListComponent = ({
   const asTyped: ChangeEventHandler<HTMLInputElement> = (event) => {
     const ca = cardAdding();
     if (ca?.listId) {
-      cardAdding({ listId: ca?.listId, inputText: event.target.value });
+      cardAdding({
+        __typename: "CardAdding",
+        listId: ca?.listId,
+        inputText: event.target.value,
+      });
     }
   };
 
