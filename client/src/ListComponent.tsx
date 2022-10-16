@@ -4,12 +4,11 @@ import { css } from "@emotion/react";
 import { ChangeEventHandler, useEffect, useRef } from "react";
 import { cardAdding, controlVariable } from "./cache";
 import { CardComponent } from "./CardComponent";
-import { nonNullArray } from "./nonNullArray";
 import {
-  CardComponentFragment,
   ListComponentFragment,
   useAddCardToListMutation,
 } from "./generated/graphql";
+import { nonNullArray } from "./nonNullArray";
 
 export interface ListComponentProps {
   fragment: ListComponentFragment;
@@ -45,15 +44,21 @@ export const ListComponent = ({
 
   const cards = fragment.cards ? nonNullArray(fragment.cards) : [];
 
-  const reallyAddCard = () => {
+  const confirmCardAdd = () => {
     const ca = cardAdding();
     if (ca?.listId && ca.inputText) {
       addCardToList({ variables: { listId: ca.listId, title: ca.inputText } });
       cardAdding(null);
     }
+    //TODO: should be from useContext()?
+    const control = controlVariable();
+    if (control?.__typename === "CardAddInitiated") {
+      //   addCardToList({ variables: { listId: control.listId, title: control.inputText } });
+      controlVariable(null);
+    }
   };
 
-  const addingCardOnClick = () => {
+  const initiateCardAdd = () => {
     cardAdding({
       __typename: "CardAdding",
       listId: fragment.id,
@@ -80,8 +85,18 @@ export const ListComponent = ({
         inputText: event.target.value,
       });
     }
+    //TODO: should be from useContext()?
+    const current = controlVariable();
+    if (current?.__typename === "CardAddInitiated") {
+      controlVariable({
+        __typename: "CardAddInitiated",
+        listId: "",
+        inputText: event.target.value,
+      });
+    }
   };
 
+  //TODO: should be from useContext()?
   const inputText = cardAdding()?.inputText;
 
   return (
@@ -119,13 +134,13 @@ export const ListComponent = ({
             <button type="button" onClick={clearCardAdding}>
               x
             </button>
-            <button type="button" onClick={reallyAddCard}>
-              really add a card
+            <button type="button" onClick={confirmCardAdd}>
+              confirm a new card
             </button>
           </form>
         </div>
       ) : (
-        <button onClick={addingCardOnClick}>Add a card</button>
+        <button onClick={initiateCardAdd}>+ new card</button>
       )}
     </div>
   );
