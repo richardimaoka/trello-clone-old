@@ -137,6 +137,7 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
       css={css`
         padding: 10px;
         background-color: ${backgroundColor};
+        margin: 5px;
       `}
       onDragStart={startCardDragged}
       onDragEnd={clearCardDragged}
