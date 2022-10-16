@@ -3,8 +3,9 @@ import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { CardEditor } from "./CardEditor";
 import { nonNullArray } from "./nonNullArray";
-import { useGetSearchResultQuery } from "./generated/graphql";
+import { ControlType, useGetSearchResultQuery } from "./generated/graphql";
 import { ListComponent } from "./ListComponent";
+import React from "react";
 
 //const QUERY = gql`...` will cause `'QUERY' is declared but its value is never read`
 gql`
@@ -42,10 +43,11 @@ export const TrelloBoard = () => {
   if (error) return <div>error happened {error.message}</div>;
   if (!data) return <div>error happened empty data</div>;
 
+  const ControlContext = React.createContext<ControlType | null>(null);
   const lists = data.lists ? nonNullArray(data.lists) : [];
 
   return (
-    <>
+    <ControlContext.Provider value={data.controlVariable}>
       {data.controlVariable?.__typename === "CardDetailOpened" ? (
         <CardEditor cardId={data.controlVariable.cardId} />
       ) : (
@@ -67,6 +69,6 @@ export const TrelloBoard = () => {
           />
         ))}
       </div>
-    </>
+    </ControlContext.Provider>
   );
 };
