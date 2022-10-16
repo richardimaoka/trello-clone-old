@@ -6,6 +6,7 @@ import { nonNullArray } from "./nonNullArray";
 import { ControlType, useGetSearchResultQuery } from "./generated/graphql";
 import { ListComponent } from "./ListComponent";
 import React from "react";
+import { ControlContext } from "./context";
 
 //const QUERY = gql`...` will cause `'QUERY' is declared but its value is never read`
 gql`
@@ -43,7 +44,6 @@ export const TrelloBoard = () => {
   if (error) return <div>error happened {error.message}</div>;
   if (!data) return <div>error happened empty data</div>;
 
-  const ControlContext = React.createContext<ControlType | null>(null);
   const lists = data.lists ? nonNullArray(data.lists) : [];
 
   return (

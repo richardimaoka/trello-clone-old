@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
-import { ChangeEventHandler, useEffect, useRef } from "react";
+import { ChangeEventHandler, useContext, useEffect, useRef } from "react";
 import { controlVariable } from "./cache";
 import { CardComponent } from "./CardComponent";
+import { ControlContext } from "./context";
 import {
   ListComponentFragment,
   useAddCardToListMutation,
@@ -29,12 +30,12 @@ export const ListComponent = ({
   draggedListId,
   draggedCardId,
 }: ListComponentProps) => {
+  const currentControl = useContext(ControlContext);
   const el = useRef<HTMLInputElement>(null);
   const [addCardToList] = useAddCardToListMutation({
     refetchQueries: ["GetSearchResult"],
   });
-  //TODO: should be from useContext()?
-  const currentControl = controlVariable();
+
   const showInput =
     currentControl?.__typename === "CardAddInitiated" &&
     currentControl.listId === fragment.id;
