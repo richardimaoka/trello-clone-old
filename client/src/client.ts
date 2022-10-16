@@ -1,10 +1,5 @@
 import { ApolloClient, InMemoryCache } from "@apollo/client";
-import {
-  controlVariable,
-  draggedCardId,
-  draggedListId,
-  overlaidCardId,
-} from "./cache";
+import { controlVariable } from "./cache";
 
 export const createApolloClient = () => {
   return new ApolloClient({
@@ -13,21 +8,6 @@ export const createApolloClient = () => {
       typePolicies: {
         Query: {
           fields: {
-            draggedCardId: {
-              read(_currentCacheValue, _options) {
-                return draggedCardId();
-              },
-            },
-            draggedListId: {
-              read(_currentCacheValue, _options) {
-                return draggedListId();
-              },
-            },
-            overlaidCardId: {
-              read(_currentCacheValue, _options) {
-                return overlaidCardId();
-              },
-            },
             controlVariable: {
               read(_currentCacheValue, _options) {
                 return controlVariable();

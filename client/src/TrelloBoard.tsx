@@ -11,9 +11,6 @@ import { ControlContext } from "./context";
 //const QUERY = gql`...` will cause `'QUERY' is declared but its value is never read`
 gql`
   query GetSearchResult {
-    draggedCardId @client
-    draggedListId @client
-    overlaidCardId @client
     controlVariable @client {
       ... on CardAddInitiated {
         listId
@@ -60,13 +57,7 @@ export const TrelloBoard = () => {
         `}
       >
         {lists.map((l, index) => (
-          <ListComponent
-            key={index}
-            fragment={l}
-            overlaidCardId={data.overlaidCardId}
-            draggedListId={data.draggedListId}
-            draggedCardId={data.draggedCardId}
-          />
+          <ListComponent key={index} fragment={l} />
         ))}
       </div>
     </ControlContext.Provider>

@@ -1,13 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
-import { DragEventHandler } from "react";
-import {
-  draggedCardId as makeDraggedCardId,
-  draggedListId as makeDraggedListId,
-  overlaidCardId as makeOverlaidCardId,
-  controlVariable,
-} from "./cache";
+import { DragEventHandler, useContext } from "react";
+import { controlVariable } from "./cache";
+import { ControlContext } from "./context";
 import {
   CardComponentFragment,
   useSwapCardsBetweenListsMutation,
@@ -17,9 +13,6 @@ import {
 export interface CardComponentProps {
   fragment: CardComponentFragment;
   listId: string;
-  overlaidCardId: string | null;
-  draggedListId: string | null;
-  draggedCardId: string | null;
 }
 
 gql`
@@ -44,13 +37,9 @@ gql`
   }
 `;
 
-export const CardComponent = ({
-  fragment,
-  listId,
-  overlaidCardId,
-  draggedListId,
-  draggedCardId,
-}: CardComponentProps) => {
+export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
+  // hooks
+  const currentControl = useContext(ControlContext);
   const [swapCardWithinList] = useSwapCardsWithinListMutation({
     refetchQueries: ["GetSearchResult"],
   });
@@ -58,76 +47,80 @@ export const CardComponent = ({
     refetchQueries: ["GetSearchResult"],
   });
 
-  const backgroundColor =
-    fragment.id === draggedCardId
-      ? "#6d6060"
-      : fragment.id === overlaidCardId
-      ? "#80dbff"
-      : "#ffffff";
+  // background color
+  const determineBackgroundColor = () => {
+    const defaultColor = "#ffffff";
+    const draggedColor = "#6d6060";
+    const overlaiedColor = "#80dbff";
 
-  const setDragged = () => {
-    makeDraggedCardId(fragment.id);
-    makeDraggedListId(listId);
+    if (currentControl?.__typename === "CardDragged") {
+      const thisCardId = fragment.id;
+      const draggedCardId = currentControl.cardId;
+      const overlaidCardId = currentControl.overlaidCardId;
+
+      if (thisCardId === draggedCardId) return draggedColor;
+      else if (thisCardId === overlaidCardId) return overlaiedColor;
+      else return defaultColor;
+    } else {
+      return defaultColor;
+    }
+  };
+  const backgroundColor = determineBackgroundColor();
+
+  // event handlers
+  const startCardDragged = () => {
     controlVariable({
       __typename: "CardDragged",
       cardId: fragment.id,
       listId: listId,
-      overlaidCardId: fragment.id,
+      overlaidCardId: null,
     });
   };
-  const clearDragAndOverlay = () => {
-    makeDraggedCardId("");
-    makeDraggedListId("");
-    makeOverlaidCardId("");
+
+  const clearCardDragged = () => {
     controlVariable(null);
   };
-  const setOverlaidCardId: DragEventHandler<HTMLDivElement> = (e) => {
-    if (fragment.id !== draggedCardId) {
-      makeOverlaidCardId(fragment.id);
-      const current = controlVariable();
-      if (current?.__typename === "CardDragged") {
-        controlVariable({
-          __typename: "CardDragged",
-          cardId: current.cardId,
-          listId: current.listId,
-          overlaidCardId: fragment.id,
-        });
-      }
+
+  const overlayCard: DragEventHandler<HTMLDivElement> = (e) => {
+    if (currentControl?.__typename === "CardDragged") {
+      controlVariable({
+        __typename: "CardDragged",
+        cardId: currentControl.cardId,
+        listId: currentControl.listId,
+        overlaidCardId: fragment.id,
+      });
     }
   };
+
   const handleDragOver = (e: any) => {
     e.preventDefault(); //this is necessary for onDrag to fire
   };
+
   const swapCards = (e: any) => {
-    const list1Id = draggedListId;
-    const list2Id = listId;
-    const card1Id = draggedCardId;
-    const card2Id = fragment.id;
+    if (currentControl?.__typename !== "CardDragged") return;
 
-    if (list1Id === list2Id) {
-      if (!card1Id) {
-        console.log("swap nothing as card1Id =", card1Id);
-        return;
-      }
+    //dragged card and its list
+    const draggedCardListId = currentControl.listId;
+    const draggedCardId = currentControl.cardId;
+    //this card and its list
+    const thisListId = listId;
+    const thisCardId = fragment.id;
 
+    if (draggedCardListId === thisListId) {
       swapCardWithinList({
-        variables: { listId: listId, card1Id: card1Id, card2Id: card2Id },
+        variables: {
+          listId: thisListId,
+          card1Id: draggedCardId,
+          card2Id: thisCardId,
+        },
       });
     } else {
-      if (!list1Id) {
-        console.log("swap nothing as list1Id =", list1Id);
-        return;
-      }
-      if (!card1Id) {
-        console.log("swap nothing as card1Id =", card1Id);
-        return;
-      }
       swapCardsBetweenLists({
         variables: {
-          list1Id: list1Id,
-          list2Id: list2Id,
-          card1Id: card1Id,
-          card2Id: card2Id,
+          list1Id: draggedCardListId,
+          card1Id: draggedCardId,
+          list2Id: thisListId,
+          card2Id: thisCardId,
         },
       });
     }
@@ -145,9 +138,9 @@ export const CardComponent = ({
         padding: 10px;
         background-color: ${backgroundColor};
       `}
-      onDragStart={setDragged}
-      onDragEnd={clearDragAndOverlay}
-      onDragEnter={setOverlaidCardId}
+      onDragStart={startCardDragged}
+      onDragEnd={clearCardDragged}
+      onDragEnter={overlayCard}
       onDragOver={handleDragOver}
       onDrop={swapCards}
       onClick={launchEditScreen}

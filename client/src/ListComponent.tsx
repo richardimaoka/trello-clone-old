@@ -13,9 +13,6 @@ import { nonNullArray } from "./nonNullArray";
 
 export interface ListComponentProps {
   fragment: ListComponentFragment;
-  overlaidCardId: string | null;
-  draggedListId: string | null;
-  draggedCardId: string | null;
 }
 
 gql`
@@ -24,12 +21,7 @@ gql`
   }
 `;
 
-export const ListComponent = ({
-  fragment,
-  overlaidCardId,
-  draggedListId,
-  draggedCardId,
-}: ListComponentProps) => {
+export const ListComponent = ({ fragment }: ListComponentProps) => {
   const currentControl = useContext(ControlContext);
   const el = useRef<HTMLInputElement>(null);
   const [addCardToList] = useAddCardToListMutation({
@@ -97,14 +89,7 @@ export const ListComponent = ({
     >
       <div>{fragment.title}</div>
       {cards.map((c, index) => (
-        <CardComponent
-          key={index}
-          fragment={c}
-          listId={fragment.id}
-          overlaidCardId={overlaidCardId}
-          draggedListId={draggedListId}
-          draggedCardId={draggedCardId}
-        />
+        <CardComponent key={index} fragment={c} listId={fragment.id} />
       ))}
 
       {showInput ? (
