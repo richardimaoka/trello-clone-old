@@ -2,14 +2,7 @@ type Query {
   draggedCardId: ID
   draggedListId: ID
   overlaidCardId: ID
-  cartItems: [Int]
-  cardAdding: CardAdding
   controlVariable: ControlType
-}
-
-type CardAdding {
-  listId: ID
-  inputText: String
 }
 
 type CardAddInitiated {

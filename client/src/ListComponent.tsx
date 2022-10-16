@@ -2,7 +2,7 @@
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { ChangeEventHandler, useEffect, useRef } from "react";
-import { cardAdding, controlVariable } from "./cache";
+import { controlVariable } from "./cache";
 import { CardComponent } from "./CardComponent";
 import {
   ListComponentFragment,
@@ -12,7 +12,6 @@ import { nonNullArray } from "./nonNullArray";
 
 export interface ListComponentProps {
   fragment: ListComponentFragment;
-  showInput: boolean;
   overlaidCardId: string | null;
   draggedListId: string | null;
   draggedCardId: string | null;
@@ -26,7 +25,6 @@ gql`
 
 export const ListComponent = ({
   fragment,
-  showInput,
   overlaidCardId,
   draggedListId,
   draggedCardId,
@@ -35,6 +33,11 @@ export const ListComponent = ({
   const [addCardToList] = useAddCardToListMutation({
     refetchQueries: ["GetSearchResult"],
   });
+  //TODO: should be from useContext()?
+  const currentControl = controlVariable();
+  const showInput =
+    currentControl?.__typename === "CardAddInitiated" &&
+    currentControl.listId === fragment.id;
 
   useEffect(() => {
     if (el.current) {
@@ -45,25 +48,18 @@ export const ListComponent = ({
   const cards = fragment.cards ? nonNullArray(fragment.cards) : [];
 
   const confirmCardAdd = () => {
-    const ca = cardAdding();
-    if (ca?.listId && ca.inputText) {
-      addCardToList({ variables: { listId: ca.listId, title: ca.inputText } });
-      cardAdding(null);
-    }
-    //TODO: should be from useContext()?
-    const control = controlVariable();
-    if (control?.__typename === "CardAddInitiated") {
-      //   addCardToList({ variables: { listId: control.listId, title: control.inputText } });
+    if (currentControl?.__typename === "CardAddInitiated") {
+      addCardToList({
+        variables: {
+          listId: currentControl.listId,
+          title: currentControl.inputText,
+        },
+      });
       controlVariable(null);
     }
   };
 
   const initiateCardAdd = () => {
-    cardAdding({
-      __typename: "CardAdding",
-      listId: fragment.id,
-      inputText: "",
-    });
     controlVariable({
       __typename: "CardAddInitiated",
       listId: fragment.id,
@@ -72,32 +68,23 @@ export const ListComponent = ({
   };
 
   const clearCardAdding = () => {
-    cardAdding(null);
     controlVariable(null);
   };
 
   const asTyped: ChangeEventHandler<HTMLInputElement> = (event) => {
-    const ca = cardAdding();
-    if (ca?.listId) {
-      cardAdding({
-        __typename: "CardAdding",
-        listId: ca?.listId,
-        inputText: event.target.value,
-      });
-    }
-    //TODO: should be from useContext()?
-    const current = controlVariable();
-    if (current?.__typename === "CardAddInitiated") {
+    if (currentControl?.__typename === "CardAddInitiated") {
       controlVariable({
         __typename: "CardAddInitiated",
-        listId: "",
+        listId: currentControl.listId,
         inputText: event.target.value,
       });
     }
   };
 
-  //TODO: should be from useContext()?
-  const inputText = cardAdding()?.inputText;
+  const inputText =
+    currentControl?.__typename === "CardAddInitiated"
+      ? currentControl.inputText
+      : "";
 
   return (
     <div

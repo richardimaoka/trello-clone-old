@@ -1,7 +1,6 @@
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import "./App.css";
 import {
-  cardAdding,
   controlVariable,
   draggedCardId,
   draggedListId,
@@ -23,11 +22,6 @@ const client = new ApolloClient({
           draggedListId: {
             read(_currentCacheValue, _options) {
               return draggedListId();
-            },
-          },
-          cardAdding: {
-            read(_currentCacheValue, _options) {
-              return cardAdding();
             },
           },
           overlaidCardId: {

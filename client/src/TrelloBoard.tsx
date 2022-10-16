@@ -12,10 +12,6 @@ gql`
     draggedCardId @client
     draggedListId @client
     overlaidCardId @client
-    cardAdding @client {
-      listId
-      inputText
-    }
     controlVariable @client {
       ... on CardAddInitiated {
         listId
@@ -68,7 +64,6 @@ export const TrelloBoard = () => {
             overlaidCardId={data.overlaidCardId}
             draggedListId={data.draggedListId}
             draggedCardId={data.draggedCardId}
-            showInput={data.cardAdding?.listId === l.id}
           />
         ))}
       </div>

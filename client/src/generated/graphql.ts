@@ -35,12 +35,6 @@ export type CardAddInitiated = {
   listId: Scalars["ID"];
 };
 
-export type CardAdding = {
-  __typename: "CardAdding";
-  inputText: Maybe<Scalars["String"]>;
-  listId: Maybe<Scalars["ID"]>;
-};
-
 export type CardDetailOpened = {
   __typename: "CardDetailOpened";
   cardId: Scalars["ID"];
@@ -105,8 +99,6 @@ export type MutationSwapCardsWithinListArgs = {
 export type Query = {
   __typename: "Query";
   card: Maybe<Card>;
-  cardAdding: Maybe<CardAdding>;
-  cartItems: Maybe<Array<Maybe<Scalars["Int"]>>>;
   controlVariable: Maybe<ControlType>;
   draggedCardId: Maybe<Scalars["ID"]>;
   draggedListId: Maybe<Scalars["ID"]>;
@@ -195,11 +187,6 @@ export type GetSearchResultQuery = {
   draggedCardId: string | null;
   draggedListId: string | null;
   overlaidCardId: string | null;
-  cardAdding: {
-    __typename: "CardAdding";
-    listId: string | null;
-    inputText: string | null;
-  } | null;
   controlVariable:
     | { __typename: "CardAddInitiated"; listId: string; inputText: string }
     | { __typename: "CardDetailOpened"; cardId: string }
@@ -475,10 +462,6 @@ export const GetSearchResultDocument = gql`
     draggedCardId @client
     draggedListId @client
     overlaidCardId @client
-    cardAdding @client {
-      listId
-      inputText
-    }
     controlVariable @client {
       ... on CardAddInitiated {
         listId
