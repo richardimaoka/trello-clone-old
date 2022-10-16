@@ -79,6 +79,12 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
       ? currentControl.inputText
       : "";
 
+  const handleDragOver = (e: any) => {
+    e.preventDefault(); // necessary for onDrag to fire
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
+    console.log("handleDragOver ListComponent", fragment.id);
+  };
+
   return (
     <div
       css={css`
@@ -86,6 +92,8 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
         background-color: #cecece;
         padding: 10px;
       `}
+      draggable={true}
+      onDragOver={handleDragOver}
     >
       <div>{fragment.title}</div>
       {cards.map((c, index) => (

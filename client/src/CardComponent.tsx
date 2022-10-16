@@ -81,7 +81,7 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     controlVariable(null);
   };
 
-  const overlayCard: DragEventHandler<HTMLDivElement> = (e) => {
+  const overlayCard = () => {
     if (currentControl?.__typename === "CardDragged") {
       controlVariable({
         __typename: "CardDragged",
@@ -92,8 +92,21 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     }
   };
 
-  const handleDragOver = (e: any) => {
-    e.preventDefault(); //this is necessary for onDrag to fire
+  const handleDragStart: DragEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
+    startCardDragged();
+  };
+  const handleDragEnd: DragEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
+    clearCardDragged();
+  };
+  const handleDragEnter: DragEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
+    overlayCard();
+  };
+  const handleDragOver: DragEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault(); // necessary for onDrag to fire
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
   };
 
   const swapCards = (e: any) => {
@@ -139,9 +152,9 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
         background-color: ${backgroundColor};
         margin: 5px 0px;
       `}
-      onDragStart={startCardDragged}
-      onDragEnd={clearCardDragged}
-      onDragEnter={overlayCard}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+      onDragEnter={handleDragEnter}
       onDragOver={handleDragOver}
       onDrop={swapCards}
       onClick={launchEditScreen}
