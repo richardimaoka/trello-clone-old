@@ -2,7 +2,7 @@
 
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
-import { controlVariable, editScreenCardId } from "./cache";
+import { controlVariable } from "./cache";
 import { useGetCardEditorQuery } from "./generated/graphql";
 
 gql`
@@ -27,7 +27,6 @@ export const CardEditor = ({ cardId }: CardEdtiorProps) => {
   if (!data) return <div>missing data...</div>;
 
   const unsetCadEditor = () => {
-    editScreenCardId("");
     controlVariable(null);
   };
 

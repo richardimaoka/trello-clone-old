@@ -5,7 +5,6 @@ import {
   controlVariable,
   draggedCardId,
   draggedListId,
-  editScreenCardId,
   overlaidCardId,
 } from "./cache";
 import { TrelloBoard } from "./TrelloBoard";
@@ -34,11 +33,6 @@ const client = new ApolloClient({
           overlaidCardId: {
             read(_currentCacheValue, _options) {
               return overlaidCardId();
-            },
-          },
-          editScreenCardId: {
-            read(_currentCacheValue, _options) {
-              return editScreenCardId();
             },
           },
           controlVariable: {

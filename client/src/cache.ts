@@ -9,8 +9,5 @@ export const overlaidCardId = makeVar<string>("");
 //card-add initiated
 export const cardAdding = makeVar<CardAdding | null>(null);
 
-//card-detail opened
-export const editScreenCardId = makeVar<string>("");
-
 //new style control variable
 export const controlVariable = makeVar<ControlType | null>(null);

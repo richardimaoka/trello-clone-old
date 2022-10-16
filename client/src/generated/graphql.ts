@@ -110,7 +110,6 @@ export type Query = {
   controlVariable: Maybe<ControlType>;
   draggedCardId: Maybe<Scalars["ID"]>;
   draggedListId: Maybe<Scalars["ID"]>;
-  editScreenCardId: Maybe<Scalars["ID"]>;
   lists: Maybe<Array<Maybe<List>>>;
   overlaidCardId: Maybe<Scalars["ID"]>;
 };
@@ -196,7 +195,6 @@ export type GetSearchResultQuery = {
   draggedCardId: string | null;
   draggedListId: string | null;
   overlaidCardId: string | null;
-  editScreenCardId: string | null;
   cardAdding: {
     __typename: "CardAdding";
     listId: string | null;
@@ -477,7 +475,6 @@ export const GetSearchResultDocument = gql`
     draggedCardId @client
     draggedListId @client
     overlaidCardId @client
-    editScreenCardId @client
     cardAdding @client {
       listId
       inputText

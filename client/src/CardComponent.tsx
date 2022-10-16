@@ -6,7 +6,6 @@ import {
   draggedCardId as makeDraggedCardId,
   draggedListId as makeDraggedListId,
   overlaidCardId as makeOverlaidCardId,
-  editScreenCardId as makeEditScreenCardId,
   controlVariable,
 } from "./cache";
 import {
@@ -133,9 +132,11 @@ export const CardComponent = ({
       });
     }
   };
+
   const launchEditScreen = () => {
-    makeEditScreenCardId(fragment.id);
+    controlVariable({ __typename: "CardDetailOpened", cardId: fragment.id });
   };
+
   return (
     <div
       data-card-id={fragment.id}

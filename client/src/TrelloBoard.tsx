@@ -12,7 +12,6 @@ gql`
     draggedCardId @client
     draggedListId @client
     overlaidCardId @client
-    editScreenCardId @client
     cardAdding @client {
       listId
       inputText
@@ -51,8 +50,8 @@ export const TrelloBoard = () => {
 
   return (
     <>
-      {data.editScreenCardId !== null && data.editScreenCardId !== "" ? (
-        <CardEditor cardId={data.editScreenCardId} />
+      {data.controlVariable?.__typename === "CardDetailOpened" ? (
+        <CardEditor cardId={data.controlVariable.cardId} />
       ) : (
         <></>
       )}
