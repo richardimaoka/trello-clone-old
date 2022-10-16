@@ -2,11 +2,10 @@
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
 import { CardEditor } from "./CardEditor";
-import { nonNullArray } from "./nonNullArray";
-import { ControlType, useGetSearchResultQuery } from "./generated/graphql";
-import { ListComponent } from "./ListComponent";
-import React from "react";
 import { ControlContext } from "./context";
+import { useGetSearchResultQuery } from "./generated/graphql";
+import { ListComponent } from "./ListComponent";
+import { nonNullArray } from "./nonNullArray";
 
 //const QUERY = gql`...` will cause `'QUERY' is declared but its value is never read`
 gql`
