@@ -18,6 +18,7 @@ type CardDragged {
 
 type ListDragged {
   listId: ID!
+  overlaidListId: ID
 }
 
 type CardDetailOpened {

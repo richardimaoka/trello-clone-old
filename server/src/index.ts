@@ -128,13 +128,15 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     cards1[card1Index] = card2;
     cards2[card2Index] = card1;
 
+    console.log(`swapCardsBetweenLists args = ${args}`);
     return 1;
   },
 
   swapLists: async (_parent, args, _context) => {
-    // console.log("swapLists");
     const lists = _context.Query.lists;
     if (!lists) throw new Error("empty lists in Query");
+    if (args.list1Id === args.list2Id)
+      throw new Error(`list1Id === list2Id : ${args.list1Id}`);
 
     const list1Index = lists.findIndex((elem) => elem?.id === args.list1Id);
     if (list1Index === -1)
@@ -149,6 +151,7 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     lists[list1Index] = list2;
     lists[list2Index] = list1;
 
+    console.log(`swapLists args = ${args.list1Id} list2 = ${args.list2Id}`);
     return 1;
   },
 };

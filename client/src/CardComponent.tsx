@@ -108,8 +108,13 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     e.preventDefault(); // necessary for onDrag to fire
     e.stopPropagation(); //necessary not to trigger Outer component's event handler
   };
+  const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault(); // necessary for onDrag to fire
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
+    swapCards();
+  };
 
-  const swapCards = (e: any) => {
+  const swapCards = () => {
     if (currentControl?.__typename !== "CardDragged") return;
 
     //dragged card and its list
@@ -156,7 +161,7 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
       onDragEnd={handleDragEnd}
       onDragEnter={handleDragEnter}
       onDragOver={handleDragOver}
-      onDrop={swapCards}
+      onDrop={handleDrop}
       onClick={launchEditScreen}
     >
       <div>{fragment.title}</div>

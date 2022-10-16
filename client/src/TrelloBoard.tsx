@@ -22,6 +22,7 @@ gql`
       }
       ... on ListDragged {
         listId
+        overlaidListId
       }
       ... on CardDetailOpened {
         cardId

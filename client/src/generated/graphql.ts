@@ -69,6 +69,7 @@ export type List = {
 export type ListDragged = {
   __typename: "ListDragged";
   listId: Scalars["ID"];
+  overlaidListId: Maybe<Scalars["ID"]>;
 };
 
 export type Mutation = {
@@ -172,6 +173,16 @@ export type AddCardToListMutation = {
   addCardToList: number | null;
 };
 
+export type SwapListsMutationVariables = Exact<{
+  list1Id: Scalars["ID"];
+  list2Id: Scalars["ID"];
+}>;
+
+export type SwapListsMutation = {
+  __typename: "Mutation";
+  swapLists: number | null;
+};
+
 export type ListComponentFragment = {
   __typename: "List";
   id: string;
@@ -199,7 +210,11 @@ export type GetSearchResultQuery = {
         cardId: string;
         overlaidCardId: string | null;
       }
-    | { __typename: "ListDragged"; listId: string }
+    | {
+        __typename: "ListDragged";
+        listId: string;
+        overlaidListId: string | null;
+      }
     | null;
   lists: Array<{
     __typename: "List";
@@ -460,6 +475,54 @@ export type AddCardToListMutationOptions = Apollo.BaseMutationOptions<
   AddCardToListMutation,
   AddCardToListMutationVariables
 >;
+export const SwapListsDocument = gql`
+  mutation swapLists($list1Id: ID!, $list2Id: ID!) {
+    swapLists(list1Id: $list1Id, list2Id: $list2Id)
+  }
+`;
+export type SwapListsMutationFn = Apollo.MutationFunction<
+  SwapListsMutation,
+  SwapListsMutationVariables
+>;
+
+/**
+ * __useSwapListsMutation__
+ *
+ * To run a mutation, you first call `useSwapListsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSwapListsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [swapListsMutation, { data, loading, error }] = useSwapListsMutation({
+ *   variables: {
+ *      list1Id: // value for 'list1Id'
+ *      list2Id: // value for 'list2Id'
+ *   },
+ * });
+ */
+export function useSwapListsMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SwapListsMutation,
+    SwapListsMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SwapListsMutation, SwapListsMutationVariables>(
+    SwapListsDocument,
+    options
+  );
+}
+export type SwapListsMutationHookResult = ReturnType<
+  typeof useSwapListsMutation
+>;
+export type SwapListsMutationResult = Apollo.MutationResult<SwapListsMutation>;
+export type SwapListsMutationOptions = Apollo.BaseMutationOptions<
+  SwapListsMutation,
+  SwapListsMutationVariables
+>;
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
     controlVariable @client {
@@ -474,6 +537,7 @@ export const GetSearchResultDocument = gql`
       }
       ... on ListDragged {
         listId
+        overlaidListId
       }
       ... on CardDetailOpened {
         cardId
