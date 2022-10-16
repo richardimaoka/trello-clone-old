@@ -26,6 +26,7 @@ type Mutation {
     card1Id: ID!
     card2Id: ID!
   ): Int
+  swapLists(list1Id: ID!, list2Id: ID!): Int
 }
 
 input CardInput {

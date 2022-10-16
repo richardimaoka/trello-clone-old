@@ -48,6 +48,7 @@ export type Mutation = {
   addCardToList: Maybe<Scalars["Int"]>;
   swapCardsBetweenLists: Maybe<Scalars["Int"]>;
   swapCardsWithinList: Maybe<Scalars["Int"]>;
+  swapLists: Maybe<Scalars["Int"]>;
 };
 
 export type MutationAddCardToListArgs = {
@@ -66,6 +67,11 @@ export type MutationSwapCardsWithinListArgs = {
   card1Id: Scalars["ID"];
   card2Id: Scalars["ID"];
   listId: Scalars["ID"];
+};
+
+export type MutationSwapListsArgs = {
+  list1Id: Scalars["ID"];
+  list2Id: Scalars["ID"];
 };
 
 export type Query = {
@@ -270,6 +276,12 @@ export type MutationResolvers<
       MutationSwapCardsWithinListArgs,
       "card1Id" | "card2Id" | "listId"
     >
+  >;
+  swapLists: Resolver<
+    Maybe<ResolversTypes["Int"]>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationSwapListsArgs, "list1Id" | "list2Id">
   >;
 };
 

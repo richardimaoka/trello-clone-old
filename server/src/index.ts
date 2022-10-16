@@ -118,7 +118,7 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
       );
 
     const card2Index = cards2.findIndex((elem) => elem?.id === args.card2Id);
-    if (card2Index === undefined || card2Index === -1)
+    if (card2Index === -1)
       throw new Error(
         `card2Id = ${args.card2Id} does not exist in list2Id = ${args.list2Id}`
       );
@@ -127,6 +127,27 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     const card2 = cards2[card2Index];
     cards1[card1Index] = card2;
     cards2[card2Index] = card1;
+
+    return 1;
+  },
+
+  swapLists: async (_parent, args, _context) => {
+    // console.log("swapLists");
+    const lists = _context.Query.lists;
+    if (!lists) throw new Error("empty lists in Query");
+
+    const list1Index = lists.findIndex((elem) => elem?.id === args.list1Id);
+    if (list1Index === -1)
+      throw new Error(`list1Id = ${args.list1Id} does not exist in lists`);
+
+    const list2Index = lists.findIndex((elem) => elem?.id === args.list2Id);
+    if (list2Index === -1)
+      throw new Error(`list2Id = ${args.list2Id} does not exist in lists`);
+
+    const list1 = lists[list1Index];
+    const list2 = lists[list2Index];
+    lists[list1Index] = list2;
+    lists[list2Index] = list1;
 
     return 1;
   },
