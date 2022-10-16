@@ -2,6 +2,7 @@ import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import "./App.css";
 import {
   cardAdding,
+  controlVariable,
   draggedCardId,
   draggedListId,
   editScreenCardId,
@@ -38,6 +39,12 @@ const client = new ApolloClient({
           editScreenCardId: {
             read(_currentCacheValue, _options) {
               return editScreenCardId();
+            },
+          },
+          controlVariable: {
+            read(_currentCacheValue, _options) {
+              console.log(controlVariable());
+              return controlVariable();
             },
           },
         },

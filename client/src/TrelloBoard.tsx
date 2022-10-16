@@ -17,6 +17,23 @@ gql`
       listId
       inputText
     }
+    controlVariable @client {
+      ... on CardAddInitiated {
+        listId
+        inputText
+      }
+      ... on CardDragged {
+        listId
+        cardId
+        overlaidCardId
+      }
+      ... on ListDragged {
+        listId
+      }
+      ... on CardDetailOpened {
+        cardId
+      }
+    }
     lists {
       ...ListComponent
     }

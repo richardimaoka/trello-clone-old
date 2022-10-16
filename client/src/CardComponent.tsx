@@ -69,6 +69,12 @@ export const CardComponent = ({
   const setDragged = () => {
     makeDraggedCardId(fragment.id);
     makeDraggedListId(listId);
+    controlVariable({
+      __typename: "CardDragged",
+      cardId: fragment.id,
+      listId: listId,
+      overlaidCardId: fragment.id,
+    });
   };
   const clearDragAndOverlay = () => {
     makeDraggedCardId("");
@@ -79,12 +85,15 @@ export const CardComponent = ({
   const setOverlaidCardId: DragEventHandler<HTMLDivElement> = (e) => {
     if (fragment.id !== draggedCardId) {
       makeOverlaidCardId(fragment.id);
-      controlVariable({
-        __typename: "CardDragged",
-        cardId: "",
-        listId: "",
-        overlaidCardId: fragment.id,
-      });
+      const current = controlVariable();
+      if (current?.__typename === "CardDragged") {
+        controlVariable({
+          __typename: "CardDragged",
+          cardId: current.cardId,
+          listId: current.listId,
+          overlaidCardId: fragment.id,
+        });
+      }
     }
   };
   const handleDragOver = (e: any) => {

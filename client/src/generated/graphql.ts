@@ -202,6 +202,17 @@ export type GetSearchResultQuery = {
     listId: string | null;
     inputText: string | null;
   } | null;
+  controlVariable:
+    | { __typename: "CardAddInitiated"; listId: string; inputText: string }
+    | { __typename: "CardDetailOpened"; cardId: string }
+    | {
+        __typename: "CardDragged";
+        listId: string;
+        cardId: string;
+        overlaidCardId: string | null;
+      }
+    | { __typename: "ListDragged"; listId: string }
+    | null;
   lists: Array<{
     __typename: "List";
     id: string;
@@ -470,6 +481,23 @@ export const GetSearchResultDocument = gql`
     cardAdding @client {
       listId
       inputText
+    }
+    controlVariable @client {
+      ... on CardAddInitiated {
+        listId
+        inputText
+      }
+      ... on CardDragged {
+        listId
+        cardId
+        overlaidCardId
+      }
+      ... on ListDragged {
+        listId
+      }
+      ... on CardDetailOpened {
+        cardId
+      }
     }
     lists {
       ...ListComponent
