@@ -24,6 +24,11 @@ gql`
         cardId
         overlaidCardId
       }
+      ... on CardDraggedOverList {
+        listId
+        cardId
+        overlaidListId
+      }
       ... on ListDragged {
         listId
         overlaidListId

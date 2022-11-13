@@ -53,7 +53,10 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     const draggedColor = "#6d6060";
     const overlaiedColor = "#80dbff";
 
-    if (currentControl?.__typename === "CardDragged") {
+    if (
+      currentControl?.__typename === "CardDragged" ||
+      currentControl?.__typename === "CardDraggedOverList"
+    ) {
       const thisCardId = fragment.id;
       const draggedCardId = currentControl.cardId;
 
@@ -86,20 +89,6 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     controlVariable(null);
   };
 
-  const overlayCard = () => {
-    if (
-      currentControl?.__typename === "CardDragged" ||
-      currentControl?.__typename === "CardDraggedOverCard"
-    ) {
-      controlVariable({
-        __typename: "CardDraggedOverCard",
-        cardId: currentControl.cardId,
-        listId: currentControl.listId,
-        overlaidCardId: fragment.id,
-      });
-    }
-  };
-
   const handleDragStart: DragEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation(); //necessary not to trigger Outer component's event handler
     startCardDragged();
@@ -109,10 +98,36 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     clearCardDragged();
   };
   const handleDragEnter: DragEventHandler<HTMLDivElement> = (e) => {
-    overlayCard();
+    console.log("handleDragEnter CardComponent");
+    if (
+      currentControl?.__typename === "CardDragged" ||
+      currentControl?.__typename === "CardDraggedOverCard" ||
+      currentControl?.__typename === "CardDraggedOverList"
+    ) {
+      e.stopPropagation(); // do not trigger List drag handler
+      controlVariable({
+        __typename: "CardDraggedOverCard",
+        cardId: currentControl.cardId,
+        listId: currentControl.listId,
+        overlaidCardId: fragment.id,
+      });
+    }
   };
   const handleDragOver: DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault(); // necessary for onDrag to fire
+    if (
+      currentControl?.__typename === "CardDragged" ||
+      currentControl?.__typename === "CardDraggedOverCard" ||
+      currentControl?.__typename === "CardDraggedOverList"
+    ) {
+      e.stopPropagation(); // do not trigger List drag handler
+      controlVariable({
+        __typename: "CardDraggedOverCard",
+        cardId: currentControl.cardId,
+        listId: currentControl.listId,
+        overlaidCardId: fragment.id,
+      });
+    }
   };
   const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault(); // necessary for onDrag to fire

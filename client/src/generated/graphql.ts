@@ -53,6 +53,13 @@ export type CardDraggedOverCard = {
   overlaidCardId: Maybe<Scalars["ID"]>;
 };
 
+export type CardDraggedOverList = {
+  __typename: "CardDraggedOverList";
+  cardId: Scalars["ID"];
+  listId: Scalars["ID"];
+  overlaidListId: Maybe<Scalars["ID"]>;
+};
+
 export type CardInput = {
   description: InputMaybe<Scalars["String"]>;
   title: InputMaybe<Scalars["String"]>;
@@ -63,6 +70,7 @@ export type ControlType =
   | CardDetailOpened
   | CardDragged
   | CardDraggedOverCard
+  | CardDraggedOverList
   | ListDragged;
 
 export type List = {
@@ -224,6 +232,12 @@ export type GetSearchResultQuery = {
         listId: string;
         cardId: string;
         overlaidCardId: string | null;
+      }
+    | {
+        __typename: "CardDraggedOverList";
+        listId: string;
+        cardId: string;
+        overlaidListId: string | null;
       }
     | {
         __typename: "ListDragged";
@@ -553,6 +567,11 @@ export const GetSearchResultDocument = gql`
         listId
         cardId
         overlaidCardId
+      }
+      ... on CardDraggedOverList {
+        listId
+        cardId
+        overlaidListId
       }
       ... on ListDragged {
         listId
