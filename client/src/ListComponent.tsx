@@ -15,6 +15,7 @@ import {
   ListComponentFragment,
   useAddCardToListMutation,
   useMoveCardToEmptyListMutation,
+  useMoveCardToTailOfListMutation,
   useSwapListsMutation,
 } from "./generated/graphql";
 import { nonNullArray } from "./nonNullArray";
@@ -27,17 +28,25 @@ gql`
   mutation addCardToList($listId: ID!, $title: String!) {
     addCardToList(listId: $listId, card: { title: $title })
   }
-`;
 
-gql`
   mutation swapLists($list1Id: ID!, $list2Id: ID!) {
     swapLists(list1Id: $list1Id, list2Id: $list2Id)
   }
-`;
 
-gql`
   mutation moveCardToEmptyList($fromListId: ID!, $toListId: ID!, $cardId: ID!) {
     moveCardToEmptyList(
+      fromListId: $fromListId
+      toListId: $toListId
+      cardId: $cardId
+    )
+  }
+
+  mutation moveCardToTailOfList(
+    $fromListId: ID!
+    $toListId: ID!
+    $cardId: ID!
+  ) {
+    moveCardToTailOfList(
       fromListId: $fromListId
       toListId: $toListId
       cardId: $cardId
@@ -55,6 +64,9 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
     refetchQueries: ["GetSearchResult"],
   });
   const [moveCardToEmptyListMutation] = useMoveCardToEmptyListMutation({
+    refetchQueries: ["GetSearchResult"],
+  });
+  const [moveCardToTailOfListMutation] = useMoveCardToTailOfListMutation({
     refetchQueries: ["GetSearchResult"],
   });
   useEffect(() => {
@@ -221,6 +233,7 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
     }
   };
   const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
+    console.log("handleDrop ListComponent");
     e.preventDefault(); // necessary for onDrag to fire
     e.stopPropagation(); //necessary not to trigger Outer component's event handler
     if (currentControl?.__typename === "ListDragged") {
@@ -242,13 +255,25 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
       //this  list
       const thisListId = fragment.id;
 
-      moveCardToEmptyListMutation({
-        variables: {
-          fromListId: draggedListId,
-          toListId: thisListId,
-          cardId: draggedCardId,
-        },
-      });
+      if (fragment.cards) {
+        if (fragment.cards.length > 0) {
+          moveCardToTailOfListMutation({
+            variables: {
+              fromListId: draggedListId,
+              toListId: thisListId,
+              cardId: draggedCardId,
+            },
+          });
+        } else {
+          moveCardToEmptyListMutation({
+            variables: {
+              fromListId: draggedListId,
+              toListId: thisListId,
+              cardId: draggedCardId,
+            },
+          });
+        }
+      }
     }
   };
 

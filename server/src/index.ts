@@ -58,9 +58,8 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
     return 10;
   },
 
-  // moveCardToEmptyList(fromListId: ID!, toListId: ID!, cardId: ID!): Int
   moveCardToEmptyList: async (_parent, args, _context) => {
-    // console.log("addCardToList");
+    console.log("moveCardToEmptyList");
     const lists = _context.Query.lists;
     if (!lists) throw new Error("empty lists in Query");
 
@@ -80,6 +79,46 @@ const mutationResolvers: MutationResolvers<LoadingDataContext> = {
       throw new Error(
         `toList = ${args.toListId} has some card but expected to be empty`
       );
+
+    const cardIndex = fromListCards.findIndex(
+      (elem) => elem?.id === args.cardId
+    );
+    if (cardIndex === -1)
+      throw new Error(
+        `cardId = ${args.cardId} does not exist in fromListId = ${args.fromListId}`
+      );
+
+    const cardToMove = fromListCards[cardIndex];
+
+    fromListCards.splice(cardIndex, 1); //remove the cardIndex element
+    toListCards.push(cardToMove);
+
+    console.log(
+      `moved ${args.cardId} from list ${args.fromListId} to list ${args.toListId}`
+    );
+
+    return 1;
+  },
+
+  moveCardToTailOfList: async (_parent, args, _context) => {
+    console.log("moveCardToTailOfList");
+    const lists = _context.Query.lists;
+    if (!lists) throw new Error("empty lists in Query");
+
+    const fromList = lists.find((elem: any) => elem.id === args.fromListId);
+    if (!fromList)
+      throw new Error(`listId = ${args.fromListId} does not exist`);
+
+    const toList = lists.find((elem: any) => elem.id === args.toListId);
+    if (!toList) throw new Error(`list2Id = ${args.toListId} does not exist`);
+
+    const fromListCards = fromList.cards;
+    if (!fromListCards)
+      throw new Error(`fromList = ${args.fromListId} has no card`);
+
+    const toListCards = toList.cards ? toList.cards : [];
+    if (toListCards.length <= 0)
+      throw new Error(`toList = ${args.toListId} has no card`);
 
     const cardIndex = fromListCards.findIndex(
       (elem) => elem?.id === args.cardId

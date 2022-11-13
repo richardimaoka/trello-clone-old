@@ -19,6 +19,7 @@ type Card {
 
 type Mutation {
   moveCardToEmptyList(fromListId: ID!, toListId: ID!, cardId: ID!): Int
+  moveCardToTailOfList(fromListId: ID!, toListId: ID!, cardId: ID!): Int
   addCardToList(listId: ID!, card: CardInput!): Int
   swapCardsWithinList(listId: ID!, card1Id: ID!, card2Id: ID!): Int
   swapCardsBetweenLists(
