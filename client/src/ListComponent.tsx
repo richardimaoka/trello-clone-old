@@ -132,6 +132,16 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
     }
   };
 
+  const leaveListDragged = () => {
+    if (currentControl?.__typename === "ListDragged") {
+      controlVariable({
+        __typename: "ListDragged",
+        listId: currentControl.listId,
+        overlaidListId: null,
+      });
+    }
+  };
+
   const clearListDragged = () => {
     controlVariable(null);
   };
@@ -164,10 +174,13 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
     e.stopPropagation(); //necessary not to trigger Outer component's event handler
     overlayList();
   };
+  const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
+    leaveListDragged();
+  };
   const handleDragOver: DragEventHandler<HTMLDivElement> = (e: any) => {
     e.preventDefault(); // necessary for onDrag to fire
     e.stopPropagation(); //necessary not to trigger Outer component's event handler
-    console.log("handleDragOver ListComponent", fragment.id);
   };
   const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault(); // necessary for onDrag to fire
@@ -187,6 +200,7 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
       onDrop={handleDrop}
     >
