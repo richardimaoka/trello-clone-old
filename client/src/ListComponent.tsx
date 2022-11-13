@@ -182,6 +182,7 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
         background-color: ${backgroundColor};
         padding: 10px;
       `}
+      // TODO: probably draggable should be conditional on current controlVariable
       draggable={true}
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}

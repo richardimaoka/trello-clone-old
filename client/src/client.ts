@@ -10,6 +10,7 @@ export const createApolloClient = () => {
           fields: {
             controlVariable: {
               read(_currentCacheValue, _options) {
+                console.log(controlVariable());
                 return controlVariable();
               },
             },

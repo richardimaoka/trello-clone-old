@@ -151,6 +151,7 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
   return (
     <div
       data-card-id={fragment.id}
+      // TODO: probably draggable should be conditional on current controlVariable
       draggable={true}
       css={css`
         padding: 10px;
