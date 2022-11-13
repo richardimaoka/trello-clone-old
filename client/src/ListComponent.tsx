@@ -181,6 +181,7 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
   const handleDragOver: DragEventHandler<HTMLDivElement> = (e: any) => {
     e.preventDefault(); // necessary for onDrag to fire
     e.stopPropagation(); //necessary not to trigger Outer component's event handler
+    overlayList();
   };
   const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault(); // necessary for onDrag to fire

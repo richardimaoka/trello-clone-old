@@ -97,20 +97,16 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     startCardDragged();
   };
   const handleDragEnd: DragEventHandler<HTMLDivElement> = (e) => {
-    e.stopPropagation(); //necessary not to trigger Outer component's event handler
     clearCardDragged();
   };
   const handleDragEnter: DragEventHandler<HTMLDivElement> = (e) => {
-    e.stopPropagation(); //necessary not to trigger Outer component's event handler
     overlayCard();
   };
   const handleDragOver: DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault(); // necessary for onDrag to fire
-    e.stopPropagation(); //necessary not to trigger Outer component's event handler
   };
   const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault(); // necessary for onDrag to fire
-    e.stopPropagation(); //necessary not to trigger Outer component's event handler
     swapCards();
   };
 
