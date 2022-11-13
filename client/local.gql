@@ -13,6 +13,11 @@ type CardAddInitiated {
 type CardDragged {
   listId: ID!
   cardId: ID!
+}
+
+type CardDraggedOverCard {
+  listId: ID!
+  cardId: ID!
   overlaidCardId: ID
 }
 
@@ -28,5 +33,6 @@ type CardDetailOpened {
 union ControlType =
     CardAddInitiated
   | CardDragged
+  | CardDraggedOverCard
   | ListDragged
   | CardDetailOpened

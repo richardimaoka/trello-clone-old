@@ -56,6 +56,12 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     if (currentControl?.__typename === "CardDragged") {
       const thisCardId = fragment.id;
       const draggedCardId = currentControl.cardId;
+
+      if (thisCardId === draggedCardId) return draggedColor;
+      else return defaultColor;
+    } else if (currentControl?.__typename === "CardDraggedOverCard") {
+      const thisCardId = fragment.id;
+      const draggedCardId = currentControl.cardId;
       const overlaidCardId = currentControl.overlaidCardId;
 
       if (thisCardId === draggedCardId) return draggedColor;
@@ -73,7 +79,6 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
       __typename: "CardDragged",
       cardId: fragment.id,
       listId: listId,
-      overlaidCardId: null,
     });
   };
 
@@ -82,9 +87,12 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
   };
 
   const overlayCard = () => {
-    if (currentControl?.__typename === "CardDragged") {
+    if (
+      currentControl?.__typename === "CardDragged" ||
+      currentControl?.__typename === "CardDraggedOverCard"
+    ) {
       controlVariable({
-        __typename: "CardDragged",
+        __typename: "CardDraggedOverCard",
         cardId: currentControl.cardId,
         listId: currentControl.listId,
         overlaidCardId: fragment.id,
@@ -97,6 +105,7 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     startCardDragged();
   };
   const handleDragEnd: DragEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
     clearCardDragged();
   };
   const handleDragEnter: DragEventHandler<HTMLDivElement> = (e) => {
@@ -111,7 +120,7 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
   };
 
   const swapCards = () => {
-    if (currentControl?.__typename !== "CardDragged") return;
+    if (currentControl?.__typename !== "CardDraggedOverCard") return;
 
     //dragged card and its list
     const draggedCardListId = currentControl.listId;
