@@ -40,24 +40,13 @@ export type CardDetailOpened = {
   cardId: Scalars["ID"];
 };
 
+export type CardDragOver = DragOverCard | DragOverList;
+
 export type CardDragged = {
   __typename: "CardDragged";
   cardId: Scalars["ID"];
+  dragOver: Maybe<CardDragOver>;
   listId: Scalars["ID"];
-};
-
-export type CardDraggedOverCard = {
-  __typename: "CardDraggedOverCard";
-  cardId: Scalars["ID"];
-  listId: Scalars["ID"];
-  overlaidCardId: Maybe<Scalars["ID"]>;
-};
-
-export type CardDraggedOverList = {
-  __typename: "CardDraggedOverList";
-  cardId: Scalars["ID"];
-  listId: Scalars["ID"];
-  overlaidListId: Maybe<Scalars["ID"]>;
 };
 
 export type CardInput = {
@@ -69,9 +58,17 @@ export type ControlType =
   | CardAddInitiated
   | CardDetailOpened
   | CardDragged
-  | CardDraggedOverCard
-  | CardDraggedOverList
   | ListDragged;
+
+export type DragOverCard = {
+  __typename: "DragOverCard";
+  cardId: Scalars["ID"];
+};
+
+export type DragOverList = {
+  __typename: "DragOverList";
+  listId: Scalars["ID"];
+};
 
 export type List = {
   __typename: "List";
@@ -255,18 +252,14 @@ export type GetSearchResultQuery = {
   controlVariable:
     | { __typename: "CardAddInitiated"; listId: string; inputText: string }
     | { __typename: "CardDetailOpened"; cardId: string }
-    | { __typename: "CardDragged"; listId: string; cardId: string }
     | {
-        __typename: "CardDraggedOverCard";
+        __typename: "CardDragged";
         listId: string;
         cardId: string;
-        overlaidCardId: string | null;
-      }
-    | {
-        __typename: "CardDraggedOverList";
-        listId: string;
-        cardId: string;
-        overlaidListId: string | null;
+        dragOver:
+          | { __typename: "DragOverCard"; cardId: string }
+          | { __typename: "DragOverList"; listId: string }
+          | null;
       }
     | {
         __typename: "ListDragged";
@@ -703,16 +696,14 @@ export const GetSearchResultDocument = gql`
       ... on CardDragged {
         listId
         cardId
-      }
-      ... on CardDraggedOverCard {
-        listId
-        cardId
-        overlaidCardId
-      }
-      ... on CardDraggedOverList {
-        listId
-        cardId
-        overlaidListId
+        dragOver {
+          ... on DragOverCard {
+            cardId
+          }
+          ... on DragOverList {
+            listId
+          }
+        }
       }
       ... on ListDragged {
         listId

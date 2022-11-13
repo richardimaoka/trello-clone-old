@@ -51,24 +51,18 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
   const determineBackgroundColor = () => {
     const defaultColor = "#ffffff";
     const draggedColor = "#6d6060";
-    const overlaiedColor = "#80dbff";
+    const overlaidColor = "#80dbff";
 
-    if (
-      currentControl?.__typename === "CardDragged" ||
-      currentControl?.__typename === "CardDraggedOverList"
-    ) {
+    if (currentControl?.__typename === "CardDragged") {
       const thisCardId = fragment.id;
       const draggedCardId = currentControl.cardId;
 
       if (thisCardId === draggedCardId) return draggedColor;
-      else return defaultColor;
-    } else if (currentControl?.__typename === "CardDraggedOverCard") {
-      const thisCardId = fragment.id;
-      const draggedCardId = currentControl.cardId;
-      const overlaidCardId = currentControl.overlaidCardId;
-
-      if (thisCardId === draggedCardId) return draggedColor;
-      else if (thisCardId === overlaidCardId) return overlaiedColor;
+      else if (
+        currentControl.dragOver?.__typename === "DragOverCard" &&
+        thisCardId === currentControl.dragOver.cardId
+      )
+        return overlaidColor;
       else return defaultColor;
     } else {
       return defaultColor;
@@ -76,12 +70,12 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
   };
   const backgroundColor = determineBackgroundColor();
 
-  // event handlers
   const startCardDragged = () => {
     controlVariable({
       __typename: "CardDragged",
       cardId: fragment.id,
       listId: listId,
+      dragOver: null,
     });
   };
 
@@ -89,53 +83,34 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     controlVariable(null);
   };
 
-  const handleDragStart: DragEventHandler<HTMLDivElement> = (e) => {
-    e.stopPropagation(); //necessary not to trigger Outer component's event handler
-    startCardDragged();
-  };
-  const handleDragEnd: DragEventHandler<HTMLDivElement> = (e) => {
-    e.stopPropagation(); //necessary not to trigger Outer component's event handler
-    clearCardDragged();
-  };
-  const handleDragEnter: DragEventHandler<HTMLDivElement> = (e) => {
-    console.log("handleDragEnter CardComponent");
-    if (
-      currentControl?.__typename === "CardDragged" ||
-      currentControl?.__typename === "CardDraggedOverCard" ||
-      currentControl?.__typename === "CardDraggedOverList"
-    ) {
+  const dragOverCard = (e: React.DragEvent<HTMLDivElement>) => {
+    if (currentControl?.__typename === "CardDragged") {
       e.stopPropagation(); // do not trigger List drag handler
       controlVariable({
-        __typename: "CardDraggedOverCard",
+        __typename: "CardDragged",
         cardId: currentControl.cardId,
         listId: currentControl.listId,
-        overlaidCardId: fragment.id,
+        dragOver: {
+          __typename: "DragOverCard",
+          cardId: fragment.id,
+        },
       });
     }
-  };
-  const handleDragOver: DragEventHandler<HTMLDivElement> = (e) => {
-    e.preventDefault(); // necessary for onDrag to fire
-    if (
-      currentControl?.__typename === "CardDragged" ||
-      currentControl?.__typename === "CardDraggedOverCard" ||
-      currentControl?.__typename === "CardDraggedOverList"
-    ) {
-      e.stopPropagation(); // do not trigger List drag handler
-      controlVariable({
-        __typename: "CardDraggedOverCard",
-        cardId: currentControl.cardId,
-        listId: currentControl.listId,
-        overlaidCardId: fragment.id,
-      });
-    }
-  };
-  const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
-    e.preventDefault(); // necessary for onDrag to fire
-    swapCards();
   };
 
-  const swapCards = () => {
-    if (currentControl?.__typename !== "CardDraggedOverCard") return;
+  const leaveCardDragged = () => {
+    if (currentControl?.__typename === "CardDragged") {
+      controlVariable({
+        __typename: "CardDragged",
+        listId: currentControl.listId,
+        cardId: currentControl.cardId,
+        dragOver: null,
+      });
+    }
+  };
+
+  const serverAction = () => {
+    if (currentControl?.__typename !== "CardDragged") return;
 
     //dragged card and its list
     const draggedCardListId = currentControl.listId;
@@ -164,6 +139,37 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
     }
   };
 
+  //dragStart to initiate, dragEnd to end the control
+  const handleDragStart: DragEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation(); //prevent outer component to overwrite control variable
+    startCardDragged();
+  };
+  const handleDragEnd: DragEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation(); //prevent outer component to overwrite control variable
+    clearCardDragged();
+  };
+
+  //drop to trigger server action
+  const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault(); // necessary for onDrag to fire
+    e.stopPropagation();
+    serverAction();
+  };
+
+  //dragEnter and dragOVer to update the control
+  const handleDragEnter: DragEventHandler<HTMLDivElement> = (e) => {
+    console.debug("handleDragEnter CardComponent");
+    dragOverCard(e);
+  };
+  const handleDragOver: DragEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault(); // necessary for onDrag to fire
+    dragOverCard(e);
+  };
+  const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault(); // necessary for onDrag to fire
+    leaveCardDragged();
+  };
+
   const launchEditScreen = () => {
     controlVariable({ __typename: "CardDetailOpened", cardId: fragment.id });
   };
@@ -182,6 +188,7 @@ export const CardComponent = ({ fragment, listId }: CardComponentProps) => {
       onDragEnd={handleDragEnd}
       onDragEnter={handleDragEnter}
       onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={launchEditScreen}
     >

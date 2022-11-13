@@ -13,18 +13,18 @@ type CardAddInitiated {
 type CardDragged {
   listId: ID!
   cardId: ID!
+  dragOver: CardDragOver
 }
 
-type CardDraggedOverCard {
+type DragOverList {
   listId: ID!
-  cardId: ID!
-  overlaidCardId: ID
 }
-type CardDraggedOverList {
-  listId: ID!
+
+type DragOverCard {
   cardId: ID!
-  overlaidListId: ID
 }
+
+union CardDragOver = DragOverCard | DragOverList
 
 type ListDragged {
   listId: ID!
@@ -38,7 +38,5 @@ type CardDetailOpened {
 union ControlType =
     CardAddInitiated
   | CardDragged
-  | CardDraggedOverCard
-  | CardDraggedOverList
   | ListDragged
   | CardDetailOpened

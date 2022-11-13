@@ -87,20 +87,21 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
     const draggedColor = "#654e83";
     const overlaidColor = "#80dbff";
 
+    const thisListId = fragment.id;
     if (currentControl?.__typename === "ListDragged") {
-      const thisListId = fragment.id;
       const draggedListId = currentControl.listId;
       const overlaidListId = currentControl.overlaidListId;
 
       if (thisListId === draggedListId) return draggedColor;
       else if (thisListId === overlaidListId) return overlaidColor;
       else return defaultColor;
-    } else if (currentControl?.__typename === "CardDraggedOverList") {
-      const thisListId = fragment.id;
-      const overlaidListId = currentControl.overlaidListId;
-
-      if (thisListId === overlaidListId) return overlaidColor;
-      else return defaultColor;
+    } else if (
+      //if card dragged over this list
+      currentControl?.__typename === "CardDragged" &&
+      currentControl.dragOver?.__typename === "DragOverList" &&
+      thisListId === currentControl.dragOver.listId
+    ) {
+      return overlaidColor;
     } else {
       return defaultColor;
     }
@@ -164,78 +165,34 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
     }
   };
 
+  const dragOverList = (e: React.DragEvent<HTMLDivElement>) => {
+    if (currentControl?.__typename === "ListDragged") {
+      console.log("printing fragment id:", fragment.id);
+      controlVariable({
+        __typename: "ListDragged",
+        listId: currentControl.listId,
+        overlaidListId: fragment.id,
+      });
+    } else if (currentControl?.__typename === "CardDragged") {
+      if (currentControl.listId !== fragment.id) {
+        controlVariable({
+          __typename: "CardDragged",
+          cardId: currentControl.cardId,
+          listId: currentControl.listId,
+          dragOver: {
+            __typename: "DragOverList",
+            listId: fragment.id,
+          },
+        });
+      }
+    }
+  };
+
   const clearListDragged = () => {
     controlVariable(null);
   };
 
-  const handleDragStart: DragEventHandler<HTMLDivElement> = (e) => {
-    e.stopPropagation(); //necessary not to trigger Outer component's event handler
-    console.log("handleDragStart ListComponent");
-    startListDragged();
-  };
-  const handleDragEnd: DragEventHandler<HTMLDivElement> = (e) => {
-    e.stopPropagation(); //necessary not to trigger Outer component's event handler
-    console.log("handleDragEnd ListComponent");
-    clearListDragged();
-  };
-  const handleDragEnter: DragEventHandler<HTMLDivElement> = (e) => {
-    e.stopPropagation(); //necessary not to trigger Outer component's event handler
-    console.log("handleDragEnter ListComponent");
-    if (currentControl?.__typename === "ListDragged") {
-      console.log("printing fragment id:", fragment.id);
-      controlVariable({
-        __typename: "ListDragged",
-        listId: currentControl.listId,
-        overlaidListId: fragment.id,
-      });
-    } else if (
-      currentControl?.__typename === "CardDragged" ||
-      currentControl?.__typename === "CardDraggedOverCard" ||
-      currentControl?.__typename === "CardDraggedOverList"
-    ) {
-      if (currentControl.listId !== fragment.id) {
-        controlVariable({
-          __typename: "CardDraggedOverList",
-          cardId: currentControl.cardId,
-          listId: currentControl.listId,
-          overlaidListId: fragment.id,
-        });
-      }
-    }
-  };
-  const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
-    console.log("handleDragLeave ListComponent");
-    leaveListDragged();
-  };
-  const handleDragOver: DragEventHandler<HTMLDivElement> = (e: any) => {
-    console.log("handleDragOver ListComponent");
-    e.preventDefault(); // necessary for onDrag to fire
-    if (currentControl?.__typename === "ListDragged") {
-      console.log("printing fragment id:", fragment.id);
-      controlVariable({
-        __typename: "ListDragged",
-        listId: currentControl.listId,
-        overlaidListId: fragment.id,
-      });
-    } else if (
-      currentControl?.__typename === "CardDragged" ||
-      currentControl?.__typename === "CardDraggedOverCard" ||
-      currentControl?.__typename === "CardDraggedOverList"
-    ) {
-      if (currentControl.listId !== fragment.id) {
-        controlVariable({
-          __typename: "CardDraggedOverList",
-          cardId: currentControl.cardId,
-          listId: currentControl.listId,
-          overlaidListId: fragment.id,
-        });
-      }
-    }
-  };
-  const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
-    console.log("handleDrop ListComponent");
-    e.preventDefault(); // necessary for onDrag to fire
-    e.stopPropagation(); //necessary not to trigger Outer component's event handler
+  const serverAction = () => {
     if (currentControl?.__typename === "ListDragged") {
       //dragged list
       const draggedListId = currentControl.listId;
@@ -248,7 +205,7 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
           list2Id: draggedListId,
         },
       });
-    } else if (currentControl?.__typename === "CardDraggedOverList") {
+    } else if (currentControl?.__typename === "CardDragged") {
       //dragged card list
       const draggedCardId = currentControl.cardId;
       const draggedListId = currentControl.listId;
@@ -275,6 +232,41 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
         }
       }
     }
+  };
+
+  //dragStart to initiate, dragEnd to end the control
+  const handleDragStart: DragEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
+    console.log("handleDragStart ListComponent");
+    startListDragged();
+  };
+  const handleDragEnd: DragEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
+    console.log("handleDragEnd ListComponent");
+    clearListDragged();
+  };
+
+  //drop to trigger server action
+  const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
+    console.log("handleDrop ListComponent");
+    e.preventDefault(); // necessary for onDrag to fire
+    e.stopPropagation(); //necessary not to trigger Outer component's event handler
+    serverAction();
+  };
+
+  //dragEnter and dragOVer to update the contro
+  const handleDragEnter: DragEventHandler<HTMLDivElement> = (e) => {
+    console.log("handleDragEnter ListComponent");
+    dragOverList(e);
+  };
+  const handleDragOver: DragEventHandler<HTMLDivElement> = (e: any) => {
+    console.log("handleDragOver ListComponent");
+    e.preventDefault(); // necessary for onDrag to fire
+    dragOverList(e);
+  };
+  const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
+    console.log("handleDragLeave ListComponent");
+    leaveListDragged();
   };
 
   return (
