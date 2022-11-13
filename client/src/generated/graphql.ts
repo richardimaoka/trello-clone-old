@@ -75,6 +75,7 @@ export type ListDragged = {
 export type Mutation = {
   __typename: "Mutation";
   addCardToList: Maybe<Scalars["Int"]>;
+  moveCardToEmptyList: Maybe<Scalars["Int"]>;
   swapCardsBetweenLists: Maybe<Scalars["Int"]>;
   swapCardsWithinList: Maybe<Scalars["Int"]>;
   swapLists: Maybe<Scalars["Int"]>;
@@ -83,6 +84,12 @@ export type Mutation = {
 export type MutationAddCardToListArgs = {
   card: CardInput;
   listId: Scalars["ID"];
+};
+
+export type MutationMoveCardToEmptyListArgs = {
+  cardId: Scalars["ID"];
+  fromListId: Scalars["ID"];
+  toListId: Scalars["ID"];
 };
 
 export type MutationSwapCardsBetweenListsArgs = {
@@ -181,6 +188,17 @@ export type SwapListsMutationVariables = Exact<{
 export type SwapListsMutation = {
   __typename: "Mutation";
   swapLists: number | null;
+};
+
+export type MoveCardToEmptyListMutationVariables = Exact<{
+  fromListId: Scalars["ID"];
+  toListId: Scalars["ID"];
+  cardId: Scalars["ID"];
+}>;
+
+export type MoveCardToEmptyListMutation = {
+  __typename: "Mutation";
+  moveCardToEmptyList: number | null;
 };
 
 export type ListComponentFragment = {
@@ -522,6 +540,60 @@ export type SwapListsMutationResult = Apollo.MutationResult<SwapListsMutation>;
 export type SwapListsMutationOptions = Apollo.BaseMutationOptions<
   SwapListsMutation,
   SwapListsMutationVariables
+>;
+export const MoveCardToEmptyListDocument = gql`
+  mutation moveCardToEmptyList($fromListId: ID!, $toListId: ID!, $cardId: ID!) {
+    moveCardToEmptyList(
+      fromListId: $fromListId
+      toListId: $toListId
+      cardId: $cardId
+    )
+  }
+`;
+export type MoveCardToEmptyListMutationFn = Apollo.MutationFunction<
+  MoveCardToEmptyListMutation,
+  MoveCardToEmptyListMutationVariables
+>;
+
+/**
+ * __useMoveCardToEmptyListMutation__
+ *
+ * To run a mutation, you first call `useMoveCardToEmptyListMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useMoveCardToEmptyListMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [moveCardToEmptyListMutation, { data, loading, error }] = useMoveCardToEmptyListMutation({
+ *   variables: {
+ *      fromListId: // value for 'fromListId'
+ *      toListId: // value for 'toListId'
+ *      cardId: // value for 'cardId'
+ *   },
+ * });
+ */
+export function useMoveCardToEmptyListMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    MoveCardToEmptyListMutation,
+    MoveCardToEmptyListMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    MoveCardToEmptyListMutation,
+    MoveCardToEmptyListMutationVariables
+  >(MoveCardToEmptyListDocument, options);
+}
+export type MoveCardToEmptyListMutationHookResult = ReturnType<
+  typeof useMoveCardToEmptyListMutation
+>;
+export type MoveCardToEmptyListMutationResult =
+  Apollo.MutationResult<MoveCardToEmptyListMutation>;
+export type MoveCardToEmptyListMutationOptions = Apollo.BaseMutationOptions<
+  MoveCardToEmptyListMutation,
+  MoveCardToEmptyListMutationVariables
 >;
 export const GetSearchResultDocument = gql`
   query GetSearchResult {
