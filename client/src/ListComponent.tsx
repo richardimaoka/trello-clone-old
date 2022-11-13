@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { gql } from "@apollo/client";
 import { css } from "@emotion/react";
-import { Currency } from "graphql-scalars/mocks";
 import {
   ChangeEventHandler,
   DragEventHandler,
@@ -15,6 +14,7 @@ import { ControlContext } from "./context";
 import {
   ListComponentFragment,
   useAddCardToListMutation,
+  useMoveCardToEmptyListMutation,
   useSwapListsMutation,
 } from "./generated/graphql";
 import { nonNullArray } from "./nonNullArray";
@@ -35,6 +35,16 @@ gql`
   }
 `;
 
+gql`
+  mutation moveCardToEmptyList($fromListId: ID!, $toListId: ID!, $cardId: ID!) {
+    moveCardToEmptyList(
+      fromListId: $fromListId
+      toListId: $toListId
+      cardId: $cardId
+    )
+  }
+`;
+
 export const ListComponent = ({ fragment }: ListComponentProps) => {
   const currentControl = useContext(ControlContext);
   const el = useRef<HTMLInputElement>(null);
@@ -42,6 +52,9 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
     refetchQueries: ["GetSearchResult"],
   });
   const [swapListsMutation] = useSwapListsMutation({
+    refetchQueries: ["GetSearchResult"],
+  });
+  const [moveCardToEmptyListMutation] = useMoveCardToEmptyListMutation({
     refetchQueries: ["GetSearchResult"],
   });
   useEffect(() => {
@@ -143,22 +156,6 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
     controlVariable(null);
   };
 
-  const swapLists = () => {
-    if (currentControl?.__typename !== "ListDragged") return;
-
-    //dragged list
-    const draggedListId = currentControl.listId;
-    //this card and its list
-    const thisListId = fragment.id;
-
-    swapListsMutation({
-      variables: {
-        list1Id: thisListId,
-        list2Id: draggedListId,
-      },
-    });
-  };
-
   const handleDragStart: DragEventHandler<HTMLDivElement> = (e) => {
     e.stopPropagation(); //necessary not to trigger Outer component's event handler
     console.log("handleDragStart ListComponent");
@@ -226,7 +223,33 @@ export const ListComponent = ({ fragment }: ListComponentProps) => {
   const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault(); // necessary for onDrag to fire
     e.stopPropagation(); //necessary not to trigger Outer component's event handler
-    swapLists();
+    if (currentControl?.__typename === "ListDragged") {
+      //dragged list
+      const draggedListId = currentControl.listId;
+      //this card and its list
+      const thisListId = fragment.id;
+
+      swapListsMutation({
+        variables: {
+          list1Id: thisListId,
+          list2Id: draggedListId,
+        },
+      });
+    } else if (currentControl?.__typename === "CardDraggedOverList") {
+      //dragged card list
+      const draggedCardId = currentControl.cardId;
+      const draggedListId = currentControl.listId;
+      //this  list
+      const thisListId = fragment.id;
+
+      moveCardToEmptyListMutation({
+        variables: {
+          fromListId: draggedListId,
+          toListId: thisListId,
+          cardId: draggedCardId,
+        },
+      });
+    }
   };
 
   return (
