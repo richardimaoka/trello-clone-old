@@ -1,0 +1,90 @@
+{
+  "lists": [
+    {
+      "id": "l-1",
+      "title": "習慣・優先度高",
+      "maxNumCards": 2,
+      "cards": [
+        {
+          "id": "c-a1",
+          "title": "tutorial",
+          "description": "this is a description for my tutorial item",
+          "labels": []
+        },
+        {
+          "id": "c-a2",
+          "title": "AWS certification",
+          "description": "",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "id": "l-2",
+      "title": "習慣・優先度低",
+      "maxNumCards": 3,
+      "cards": [
+        {
+          "id": "c-b1",
+          "title": "tutorial 2",
+          "description": "",
+          "labels": []
+        },
+        {
+          "id": "c-b2",
+          "title": "AWS certification 2",
+          "description": "",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "id": "l-3",
+      "title": "Ready",
+      "maxNumCards": 5,
+      "cards": [
+        {
+          "id": "c-c1",
+          "title": "8/4 劇場版スタァライト",
+          "description": "",
+          "labels": []
+        },
+        {
+          "id": "c-c2",
+          "title": "8/5 スピラ・スピカのチケット情報",
+          "description": "",
+          "labels": []
+        },
+        {
+          "id": "c-c3",
+          "title": "8/20 電音部 2nd LIVE 上映&DJイベントのチケット情報",
+          "description": "",
+          "labels": []
+        },
+        {
+          "id": "c-c4",
+          "title": "Quickly Filter Data in Amazon Redshift Using Interleaved Sorting",
+          "description": "",
+          "labels": []
+        }
+      ]
+    },
+    {
+      "id": "l-4",
+      "title": "On it < 60 min",
+      "maxNumCards": 1,
+      "cards": []
+    },
+    {
+      "id": "l-5",
+      "title": "Waiting",
+      "maxNumCards": 1,
+      "cards": []
+    },
+    {
+      "id": "l-6",
+      "title": "DONE",
+      "cards": []
+    }
+  ]
+}
