@@ -43,7 +43,7 @@ func (r *mutationResolver) SwapLists(ctx context.Context, list1Id string, list2I
 
 // Lists is the resolver for the lists field.
 func (r *queryResolver) Lists(ctx context.Context) ([]*model.List, error) {
-	panic(fmt.Errorf("not implemented: Lists - lists"))
+	return r.query.Lists, nil
 }
 
 // Card is the resolver for the card field.

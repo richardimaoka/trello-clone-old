@@ -11,7 +11,7 @@ import (
 // It serves as dependency injection for your app, add any dependencies you require here.
 type Resolver struct {
 	query struct {
-		Cards []*model.List `json:"lists"`
+		Lists []*model.List `json:"lists"`
 	}
 }
 
