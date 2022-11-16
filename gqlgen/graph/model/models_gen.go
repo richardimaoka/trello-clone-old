@@ -2,19 +2,21 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type Card struct {
+	ID          string    `json:"id"`
+	Title       *string   `json:"title"`
+	Description *string   `json:"description"`
+	Labels      []*string `json:"labels"`
 }
 
-type Todo struct {
-	ID   string `json:"id"`
-	Text string `json:"text"`
-	Done bool   `json:"done"`
-	User *User  `json:"user"`
+type CardInput struct {
+	Title       *string `json:"title"`
+	Description *string `json:"description"`
 }
 
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type List struct {
+	ID          string  `json:"id"`
+	Title       *string `json:"title"`
+	MaxNumCards *int    `json:"maxNumCards"`
+	Cards       []*Card `json:"cards"`
 }

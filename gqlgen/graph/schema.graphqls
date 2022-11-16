@@ -1,28 +1,37 @@
-# GraphQL schema example
-#
-# https://gqlgen.com/getting-started/
-
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
-}
-
-type User {
-  id: ID!
-  name: String!
-}
-
 type Query {
-  todos: [Todo!]!
+  lists: [List]
+  card(id: ID!): Card
 }
 
-input NewTodo {
-  text: String!
-  userId: String!
+type List {
+  id: ID!
+  title: String
+  maxNumCards: Int
+  cards: [Card]
+}
+
+type Card {
+  id: ID!
+  title: String
+  description: String
+  labels: [String]
 }
 
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
+  moveCardToEmptyList(fromListId: ID!, toListId: ID!, cardId: ID!): Int
+  moveCardToTailOfList(fromListId: ID!, toListId: ID!, cardId: ID!): Int
+  addCardToList(listId: ID!, card: CardInput!): Int
+  swapCardsWithinList(listId: ID!, card1Id: ID!, card2Id: ID!): Int
+  swapCardsBetweenLists(
+    list1Id: ID!
+    list2Id: ID!
+    card1Id: ID!
+    card2Id: ID!
+  ): Int
+  swapLists(list1Id: ID!, list2Id: ID!): Int
+}
+
+input CardInput {
+  title: String
+  description: String
 }
