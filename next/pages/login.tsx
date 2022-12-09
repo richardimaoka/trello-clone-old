@@ -26,9 +26,9 @@ const login = () => {
 
   return (
     <div style={{ backgroundColor: "#f9fafc", height: "100vh" }}>
-      <div>
+      <div style={{ padding: "40px 0px" }}>
         <img
-          style={{ display: "block", width: "200px", margin: "40px auto" }}
+          style={{ display: "block", width: "200px", margin: "auto" }}
           alt="Trello"
           src="/secret-images/logo.svg"
         />
@@ -39,11 +39,21 @@ const login = () => {
           maxWidth: "400px",
           margin: "0 auto",
           boxShadow: "rgb(0 0 0 / 10%) 0 0 10px",
+          padding: "25px 40px",
         }}
       >
         <form>
-          <div>
+          <div style={{ marginBottom: "10px" }}>
             <input
+              style={{
+                width: "100%",
+                height: "40px",
+                padding: "7px",
+                borderRadius: "3px",
+                borderWidth: "2px",
+                borderColor: "#dfe1e6",
+                borderStyle: "solid",
+              }}
               placeholder="メールアドレスを入力"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -51,6 +61,15 @@ const login = () => {
           </div>
           <div>
             <input
+              style={{
+                width: "100%",
+                height: "40px",
+                padding: "7px",
+                borderRadius: "3px",
+                borderWidth: "2px",
+                borderColor: "#dfe1e6",
+                borderStyle: "solid",
+              }}
               type="password"
               placeholder="パスワードを入力"
               value={password}
@@ -63,7 +82,21 @@ const login = () => {
             <Link href="https://google.com">プライバシーポリシー</Link>
             を読み、これに同意するものとします。
           </p>
-          <button type="button" onClick={createUser}>
+          <button
+            type="button"
+            style={{
+              width: "100%",
+              height: "40px",
+              padding: "7px",
+              backgroundColor: "#5AAC44",
+              color: "white",
+              borderRadius: "3px",
+              borderWidth: "2px",
+              borderColor: "#dfe1e6",
+              borderStyle: "solid",
+            }}
+            onClick={createUser}
+          >
             サインアップ
           </button>
         </form>
