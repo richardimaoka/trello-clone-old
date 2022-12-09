@@ -25,9 +25,22 @@ const login = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "lightgray" }}>
-      <div>login</div>
-      <div style={{ backgroundColor: "white", maxWidth: "400px" }}>
+    <div style={{ backgroundColor: "#f9fafc", height: "100vh" }}>
+      <div>
+        <img
+          style={{ display: "block", width: "200px", margin: "40px auto" }}
+          alt="Trello"
+          src="/secret-images/logo.svg"
+        />
+      </div>
+      <div
+        style={{
+          backgroundColor: "white",
+          maxWidth: "400px",
+          margin: "0 auto",
+          boxShadow: "rgb(0 0 0 / 10%) 0 0 10px",
+        }}
+      >
         <form>
           <div>
             <input

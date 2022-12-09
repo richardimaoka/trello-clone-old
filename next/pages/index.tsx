@@ -11,6 +11,7 @@ export default function Home() {
   const { auth } = useContext(FirebaseContext);
   const router = useRouter();
   useEffect(() => {
+    console.log("see if I'm  logged in");
     onAuthStateChanged(auth, (user) => {
       console.log("current user = ", user);
       if (!user) router.push("login");
