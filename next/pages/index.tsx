@@ -1,8 +1,21 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import { onAuthStateChanged } from "firebase/auth";
+import Head from "next/head";
+import Image from "next/image";
+import { useRouter } from "next/router";
+import { useContext } from "react";
+import { useEffect } from "react";
+import { FirebaseContext } from "../components/FirebaseContext";
+import styles from "../styles/Home.module.css";
 
 export default function Home() {
+  const { auth } = useContext(FirebaseContext);
+  const router = useRouter();
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      console.log("current user = ", user);
+      if (!user) router.push("login");
+    });
+  });
   return (
     <div className={styles.container}>
       <Head>
@@ -17,7 +30,7 @@ export default function Home() {
         </h1>
 
         <p className={styles.description}>
-          Get started by editing{' '}
+          Get started by editing{" "}
           <code className={styles.code}>pages/index.tsx</code>
         </p>
 
@@ -60,12 +73,12 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by{' '}
+          Powered by{" "}
           <span className={styles.logo}>
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
       </footer>
     </div>
-  )
+  );
 }

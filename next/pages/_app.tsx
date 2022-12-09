@@ -1,7 +1,14 @@
-import "../styles/globals.css";
 import type { AppProps } from "next/app";
+import React from "react";
+import { FirebaseContext, app, auth } from "../components/FirebaseContext";
+import "../styles/globals.css";
 
-export default function App({ Component, pageProps }: AppProps) {
-  console.log("App component loaded");
-  return <Component {...pageProps} />;
-}
+const App = ({ Component, pageProps }: AppProps) => {
+  return (
+    <FirebaseContext.Provider value={{ app, auth }}>
+      <Component {...pageProps} />
+    </FirebaseContext.Provider>
+  );
+};
+
+export default App;
