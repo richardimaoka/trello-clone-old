@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useContext, useState } from "react";
 import { FirebaseContext } from "../components/FirebaseContext";
 import { LoginButton } from "../components/LoginButton";
+import { SignUpButton } from "../components/SignupButton";
 
 const login = () => {
   const { auth } = useContext(FirebaseContext);
@@ -77,45 +78,45 @@ const login = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+
           <p>
             アカウントを作成することにより、
             <Link href="https://google.com">利用規約</Link>および
             <Link href="https://google.com">プライバシーポリシー</Link>
             を読み、これに同意するものとします。
           </p>
-          <button
-            type="button"
+
+          <div style={{ marginBottom: "16px" }}>
+            <SignUpButton onclick={createUser} />
+          </div>
+
+          <p
             style={{
-              width: "100%",
-              height: "40px",
-              padding: "7px",
-              backgroundColor: "#5AAC44",
-              color: "white",
-              borderRadius: "3px",
-              borderWidth: "2px",
-              borderColor: "#dfe1e6",
-              borderStyle: "solid",
+              color: "rgb(94, 108, 132)",
+              fontSize: "14px",
+              textAlign: "center",
             }}
-            onClick={createUser}
           >
-            サインアップ
-          </button>
-          <LoginButton
-            imageUrl="/secret-images/google-logo.svg"
-            text="Googleで続行"
-          />
-          <LoginButton
-            imageUrl="/secret-images/microsoft-logo.svg"
-            text="Microsoftで続行"
-          />
-          <LoginButton
-            imageUrl="/secret-images/apple-logo.svg"
-            text="Appleで続行"
-          />
-          <button type="button">Microsoftで続行</button>
-          <button type="button">Appleで続行</button>
+            または
+          </p>
+
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+          >
+            <LoginButton
+              imageUrl="/secret-images/google-logo.svg"
+              text="Googleで続行"
+            />
+            <LoginButton
+              imageUrl="/secret-images/microsoft-logo.svg"
+              text="Microsoftで続行"
+            />
+            <LoginButton
+              imageUrl="/secret-images/apple-logo.svg"
+              text="Appleで続行"
+            />
+          </div>
         </form>
-        <Link href="/">home</Link>
       </div>
     </div>
   );
