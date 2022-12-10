@@ -1,6 +1,11 @@
 // Import the functions you need from the SDKs you need
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { Auth, connectAuthEmulator, getAuth } from "firebase/auth";
+import {
+  Auth,
+  connectAuthEmulator,
+  getAuth,
+  GoogleAuthProvider,
+} from "firebase/auth";
 
 import React from "react";
 
@@ -22,15 +27,19 @@ export const app = initializeApp(firebaseConfig);
 // Initialize Firebase Authentication and get a reference to the service
 export const auth = getAuth(app);
 
-connectAuthEmulator(auth, "http://localhost:9099");
+export const googleAuthProvider = new GoogleAuthProvider();
+
+// connectAuthEmulator(auth, "http://localhost:9099");
 console.log("connected to the auth emulator");
 
 export interface FireabaseSettings {
   app: FirebaseApp;
   auth: Auth;
+  googleAuthProvider: GoogleAuthProvider;
 }
 
 export const FirebaseContext = React.createContext<FireabaseSettings>({
   app,
   auth,
+  googleAuthProvider,
 });

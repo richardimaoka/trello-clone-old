@@ -1,4 +1,8 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  signInWithRedirect,
+} from "firebase/auth";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { FirebaseContext } from "../components/FirebaseContext";
@@ -6,7 +10,7 @@ import { LoginButton } from "../components/LoginButton";
 import { SignUpButton } from "../components/SignupButton";
 
 const login = () => {
-  const { auth } = useContext(FirebaseContext);
+  const { auth, googleAuthProvider } = useContext(FirebaseContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -15,7 +19,24 @@ const login = () => {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        console.log("user crated:", user);
+        console.log("user created:", user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log("error: ", error);
+        console.log(auth);
+        // ..
+      });
+  };
+
+  const signInWithGoogle = () => {
+    console.log("signInWithGoogle: ", auth, googleAuthProvider);
+    signInWithPopup(auth, googleAuthProvider)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        console.log("user created:", user);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -106,6 +127,7 @@ const login = () => {
             <LoginButton
               imageUrl="/secret-images/google-logo.svg"
               text="Googleで続行"
+              onclick={signInWithGoogle}
             />
             <LoginButton
               imageUrl="/secret-images/microsoft-logo.svg"

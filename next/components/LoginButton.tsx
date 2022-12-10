@@ -1,9 +1,10 @@
 interface LoginButtonProps {
   imageUrl: string;
   text: string;
+  onclick?: () => void;
 }
 
-export const LoginButton = ({ imageUrl, text }: LoginButtonProps) => {
+export const LoginButton = ({ imageUrl, text, onclick }: LoginButtonProps) => {
   return (
     <button
       type="button"
@@ -22,6 +23,7 @@ export const LoginButton = ({ imageUrl, text }: LoginButtonProps) => {
         borderStyle: "solid",
         boxShadow: "rgb(0 0 0 / 10%) 0 0 10px",
       }}
+      onClick={onclick}
     >
       <img
         width="18px"
