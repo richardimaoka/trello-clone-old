@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { FirebaseContext } from "../components/FirebaseContext";
+import { LoginButton } from "../components/LoginButton";
 
 const login = () => {
   const { auth } = useContext(FirebaseContext);
@@ -99,37 +100,18 @@ const login = () => {
           >
             サインアップ
           </button>
-          <button
-            type="button"
-            style={{
-              display: "flex",
-              alignItems: "center",
-              width: "100%",
-              height: "40px",
-              padding: "0px 10px",
-              color: "#42526E",
-              backgroundColor: "white",
-              fontWeight: "900",
-              borderRadius: "3px",
-              borderWidth: "2px",
-              borderColor: "#dfe1e6",
-              borderStyle: "solid",
-              boxShadow: "rgb(0 0 0 / 10%) 0 0 10px",
-            }}
-          >
-            <img
-              width="18px"
-              height="18px"
-              style={{
-                display: "block",
-                flexGrow: 0,
-                flexShrink: 0,
-                flexBasis: "18px",
-              }}
-              src="/secret-images/google-logo.svg"
-            />
-            <span style={{ display: "block", flexGrow: 1 }}>Googleで続行</span>
-          </button>
+          <LoginButton
+            imageUrl="/secret-images/google-logo.svg"
+            text="Googleで続行"
+          />
+          <LoginButton
+            imageUrl="/secret-images/microsoft-logo.svg"
+            text="Microsoftで続行"
+          />
+          <LoginButton
+            imageUrl="/secret-images/apple-logo.svg"
+            text="Appleで続行"
+          />
           <button type="button">Microsoftで続行</button>
           <button type="button">Appleで続行</button>
         </form>
