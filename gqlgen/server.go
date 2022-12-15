@@ -22,12 +22,17 @@ func main() {
 		log.Fatalf("error initializing app: %v\n", err)
 	}
 
+	client, err := app.Auth(context.Background())
+	if err != nil {
+		log.Fatalf("error initializing app.Auth: %v\n", err)
+	}
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
 	}
 
-	resolver := graph.NewResolver()
+	resolver := graph.NewResolver(client)
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: resolver}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
