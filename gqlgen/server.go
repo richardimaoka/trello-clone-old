@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
@@ -9,11 +10,18 @@ import (
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/richardimaoka/trello-clone/gqlgen/graph"
 	"github.com/richardimaoka/trello-clone/gqlgen/graph/generated"
+
+	firebase "firebase.google.com/go/v4"
 )
 
 const defaultPort = "8080"
 
 func main() {
+	app, err := firebase.NewApp(context.Background(), nil)
+	if err != nil {
+		log.Fatalf("error initializing app: %v\n", err)
+	}
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = defaultPort
