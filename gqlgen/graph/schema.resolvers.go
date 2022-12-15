@@ -6,6 +6,7 @@ package graph
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"github.com/richardimaoka/trello-clone/gqlgen/graph/generated"
 	"github.com/richardimaoka/trello-clone/gqlgen/graph/model"
@@ -43,7 +44,18 @@ func (r *mutationResolver) SwapLists(ctx context.Context, list1Id string, list2I
 
 // Lists is the resolver for the lists field.
 func (r *queryResolver) Lists(ctx context.Context) ([]*model.List, error) {
+	v := ctx.Value("idToken")
+	idToken, ok := v.(string)
+	if !ok {
+		log.Fatal("token not found")
+	}
 
+	token, err := r.client.VerifyIDToken(ctx, idToken)
+	if err != nil {
+		log.Fatalf("error verifying ID token: %v\n", err)
+	}
+
+	log.Printf("Verified ID token: %v\n", token)
 	return r.query.Lists, nil
 }
 
